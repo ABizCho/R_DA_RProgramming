@@ -1,0 +1,216 @@
+---
+title: "PR6 조건문과 반복문"
+author: "조성우"
+date: '2020 4 24 '
+output:
+  word_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# 조건문과 반복문
+## 1. 반복문
+### 1.1 for()
+```{r}
+a <-c(1,2,4) ; a
+```
+
+```{r}
+for(i in a) print(i)
+```
+
+```{r}
+for(i in c(1,2,4))
+  print(i)
+```
+
+```{r}
+string <- c("test","for","for()")
+for (i in string)
+  print(i)
+```
+
+```{r}
+for(i in c("test","for","for()"))
+  print(i)
+```
+
+```{r}
+for (i in 1:3)
+  print(i)
+```
+
+```{r}
+print("다음줄")
+```
+
+```{r}
+print(i+1)
+```
+
+```{r}
+for(i in 1:3){
+  print(i)
+  print("다음줄")
+  print(i+1)
+}
+```
+
+```{r}
+j <-1:6
+for(i in seq(2,6,by=2)){
+  #j의 짝수번 순서
+  print(paste0(i,"번째 데이터:"))
+  #짝수번쨰 데이터만 불러와짐
+  print(j[i])
+}
+```
+
+```{r}
+for(a in 1:10)
+  print(a)
+```
+
+```{r}
+for(i in 1:10){
+  print(i)
+  break
+}
+```
+### 1.2 while()문
+```{r}
+i = 1
+while(i<5){
+  print(i)
+  i=i+1
+}
+```
+### 1.3 repeat
+```{r}
+i <- 1
+repeat{
+  i <- i+30
+  if(i>100)break
+  print(i)
+}
+```
+## 2. 조건문
+### 2.1 if문과 if-else문
+```{r}
+x=80
+if(x<=90) print("B")
+```
+
+```{r}
+if(x<=80) print("C")
+```
+
+```{r}
+x <- 91
+if(x>90){
+  print("B")
+  x=x+10
+  print(x)
+}
+```
+
+```{r}
+x=91
+if(x<=90) print("B") else print("C")
+```
+
+```{r}
+if(x<90){
+  print("B")
+  x=x+10
+}else{
+  print("C")
+}
+```
+
+```{r}
+x <-100
+if(x<70){
+  print("F")
+}else if(x<80){
+  print("C")
+}else if(x<90){
+  print("B")
+}else {
+  print("A")
+}
+```
+### 2.2 ifelse
+```{r}
+x <-10
+ifelse(x>5,x+5,x-5)
+```
+## 3. 조건문과 반복문 함께 사용하기
+```{r}
+x <- 1:10
+for(i in x){
+  if(i%%2==0){
+    print(i)
+  }
+}
+```
+# PR6 연습문제
+## 문제1 
+```{r}
+MURL= NULL
+
+for (i in 1:100){
+  a <- paste0("https://movie.daum.net/moviedb/grade?movieId=95554&type=netizen&page=",i)
+  MURL <-append(MURL,a,after=i)
+  }
+head(MURL,10) #head함수로 10개의 리뷰링크만 출력하겠습니다
+```
+
+## 문제2 - 구구단(2단)을 출력하는 for문을 작성하시오
+```{r}
+a <- NULL
+for (i in 1:9){
+  a <- paste0("2*",i,"=",i*2)
+  print(a)
+}
+
+```
+## 문제3 - 1부터 1000사이에 3이라는 숫자가 총 몇번 나오는지 구하세요.
+```{r}
+#해답 코드입니다.
+
+count = 0
+for ( i in 1:1000){
+  if (i %% 10 ==3){count=count+1} #1의자리가 3인 모든 수를 한번씩 count
+  if ((i %% 100) %/% 10 ==3){count=count+1} #10의 자리가 3인 모든 수를 한번씩 count
+  if (i %/% 100 == 3){count=count+1} #100의자리가 3인 모든 수를 count
+}
+count
+
+
+### 밑의 코드는 검증을위한 코드입니다 step 1,2,3의 count 누계가 3이나온 총 숫자가 되는것입니다.
+
+#1단계 : 1단계 코드 실행 후 step1을 출력 시 1의자리가 3인 모든 수를 보여준다
+step1=NULL
+for (i in 1:1000){
+  if (i %% 10 == 3){step1 <- append(step1,i,after=i)}
+}
+#print(step1)
+
+#2단계 : 2단계 코드 실행 후 step2를 출력 시 10의자리가 3인 모든 수를 보여준다
+step2=NULL
+for (i in 1:1000){
+  if ( (i %% 100) %/% 10 ==3){step2 <- append(step2,i,after=i)} #100으로 나눈 나머지를 10으로 나눈 몫이 3인 경우 = 100의 자리가 3이 나오는 경우 (300,)
+}
+#print(step2)
+
+#3단계 : 3단계 코드 실행 후 step3를 출력 시 100의자리가 3인 모든 수를 보여준다
+step3=NULL
+for (i in 1:1000){
+  if ( i %/% 100==3){step3 <- append(step3,i,after=i)}
+}
+#print(step3)
+
+```

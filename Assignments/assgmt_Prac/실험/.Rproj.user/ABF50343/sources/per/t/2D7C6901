@@ -1,0 +1,26 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1585325229460.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3866487876",
+    "id" : "2D7C6901",
+    "lastKnownWriteTime" : 1585332135,
+    "last_content_update" : 1585332135,
+    "path" : "C:/Users/JSW/Desktop/강의자료/R프로그래밍/R 실습 및 과제/과제/실험/이진,삼진벡터 연산 성공.R",
+    "project_path" : "이진,삼진벡터 연산 성공.R",
+    "properties" : {
+        "cursorPosition" : "16,135",
+        "scrollLine" : "0",
+        "tempName" : "Untitled1"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

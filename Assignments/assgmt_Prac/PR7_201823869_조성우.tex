@@ -1,0 +1,496 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={PR7 - 함수},
+  pdfauthor={조성우},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+
+\title{PR7 - 함수}
+\author{조성우}
+\date{2020년 4월 30일}
+
+\begin{document}
+\maketitle
+
+\hypertarget{uxd568uxc218uxc640-uxc0acuxc6a9uxc790uxc815uxc758-uxd568uxc218}{%
+\section{함수와 사용자정의
+함수}\label{uxd568uxc218uxc640-uxc0acuxc6a9uxc790uxc815uxc758-uxd568uxc218}}
+
+\hypertarget{uxd568uxc218}{%
+\subsection{함수}\label{uxd568uxc218}}
+
+\begin{itemize}
+\tightlist
+\item
+  특정 목적에 맞게 생성된 연산과정의 집합
+\item
+  ex) mean 함수 : 모든 원소의 합을 원소의 개수로 나눔
+\end{itemize}
+
+\#\#사용자 정의 함수 * 사용자의 편의에 따라 직접 작성하여 사용하는 함수
+* 함수명 \textless- function(인수)\{연산과정\} 형태로 작성(한가지만
+연산할 경우\{\}로 묶지 않아도 됨) * 연산과정으로 나오는 결과값을
+return,print,cat등으로 반환하는 형태가 이상적
+
+\hypertarget{uxc5d0uxc2dc1.-uxb450-uxc22buxc790uxb97c-uxbe44uxad50uxd574-uxb354uxd070uxc218uxb97c-uxbc18uxd658uxd558uxb294-uxd568uxc218}{%
+\subsubsection{에시1. 두 숫자를 비교해 더큰수를 반환하는
+함수}\label{uxc5d0uxc2dc1.-uxb450-uxc22buxc790uxb97c-uxbe44uxad50uxd574-uxb354uxd070uxc218uxb97c-uxbc18uxd658uxd558uxb294-uxd568uxc218}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#2개의 숫자를 인수로 받아서 더 큰수를 반환하는 함수}
+\NormalTok{compare <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x,y) }\ControlFlowTok{if}\NormalTok{(x}\OperatorTok{>}\NormalTok{y) }\KeywordTok{cat}\NormalTok{(x) }\ControlFlowTok{else} \KeywordTok{cat}\NormalTok{(y)}
+\KeywordTok{compare}\NormalTok{(}\DecValTok{10}\NormalTok{,}\DecValTok{20}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 20
+\end{verbatim}
+
+\hypertarget{uxc608uxc2dc2.-uxd3c9uxade0uxac12uxacfc-uxd45cuxc900uxc624uxcc28uxb97c-uxacc4uxc0b0uxd558uxb294-uxd568uxc218}{%
+\subsubsection{예시2. 평균값과 표준오차를 계산하는
+함수}\label{uxc608uxc2dc2.-uxd3c9uxade0uxac12uxacfc-uxd45cuxc900uxc624uxcc28uxb97c-uxacc4uxc0b0uxd558uxb294-uxd568uxc218}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#표준오차 = 표준편차 / 표본의크기}
+
+\NormalTok{se <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x)\{}
+\NormalTok{  tmp.sd <-}\KeywordTok{sd}\NormalTok{(x) }\CommentTok{#표준편차}
+\NormalTok{  tmp.N <-}\StringTok{ }\KeywordTok{length}\NormalTok{(x) }\CommentTok{#표본크기}
+\NormalTok{  tmp.se <-}\StringTok{ }\NormalTok{tmp.sd }\OperatorTok{/}\StringTok{ }\KeywordTok{sqrt}\NormalTok{(tmp.N) }\CommentTok{#평균의 표준오차}
+\NormalTok{\}}
+
+\NormalTok{A <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{6}\NormalTok{,}\DecValTok{7}\NormalTok{,}\DecValTok{8}\NormalTok{,}\DecValTok{9}\NormalTok{,}\DecValTok{10}\NormalTok{)}
+\KeywordTok{cat}\NormalTok{(}\KeywordTok{se}\NormalTok{(A))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 0.9574271
+\end{verbatim}
+
+\hypertarget{uxc608uxc2dc3.-uxb370uxc774uxd130-uxd504uxb808uxc784uxc758-uxc55euxb4a4-3uxac1cuxc758-uxb370uxc774uxd130uxb97c-uxb9acuxc2a4uxd2b8uxb85c-uxbcf4uxc5ecuxc8fcuxb294-uxd568uxc218}{%
+\subsubsection{예시3. 데이터 프레임의 앞뒤 3개의 데이터를 리스트로
+보여주는
+함수}\label{uxc608uxc2dc3.-uxb370uxc774uxd130-uxd504uxb808uxc784uxc758-uxc55euxb4a4-3uxac1cuxc758-uxb370uxc774uxd130uxb97c-uxb9acuxc2a4uxd2b8uxb85c-uxbcf4uxc5ecuxc8fcuxb294-uxd568uxc218}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{head_tail <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x)\{}
+\NormalTok{  front <-}\StringTok{ }\KeywordTok{head}\NormalTok{(x,}\DecValTok{3}\NormalTok{)}
+\NormalTok{  rear <-}\StringTok{ }\KeywordTok{tail}\NormalTok{(x,}\DecValTok{3}\NormalTok{)}
+\NormalTok{  F_R <-}\StringTok{ }\KeywordTok{list}\NormalTok{(front,rear) }\CommentTok{#2개의 데이터프레임 릿트로 묶음}
+  \KeywordTok{print}\NormalTok{(F_R) }\CommentTok{#묶은 리스트 반환}
+\NormalTok{\}}
+
+\KeywordTok{head_tail}\NormalTok{(mtcars)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [[1]]
+##                mpg cyl disp  hp drat    wt  qsec vs am gear carb
+## Mazda RX4     21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+## Mazda RX4 Wag 21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+## Datsun 710    22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+## 
+## [[2]]
+##                mpg cyl disp  hp drat   wt qsec vs am gear carb
+## Ferrari Dino  19.7   6  145 175 3.62 2.77 15.5  0  1    5    6
+## Maserati Bora 15.0   8  301 335 3.54 3.57 14.6  0  1    5    8
+## Volvo 142E    21.4   4  121 109 4.11 2.78 18.6  1  1    4    2
+\end{verbatim}
+
+\hypertarget{uxc608uxc2dc4.-uxd640uxc218-uxd310uxbcc4-uxd568uxc218}{%
+\subsubsection{예시4. 홀수 판별
+함수}\label{uxc608uxc2dc4.-uxd640uxc218-uxd310uxbcc4-uxd568uxc218}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{oddnum <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x)\{}
+  \ControlFlowTok{if}\NormalTok{(x}\OperatorTok{%%}\DecValTok{2}\OperatorTok{==}\DecValTok{1}\NormalTok{)\{ }\CommentTok{#2로 나눈 나머지가 1이면}
+    \KeywordTok{return}\NormalTok{(T)}
+\NormalTok{  \}}\ControlFlowTok{else}\NormalTok{ \{ }\CommentTok{#그렇지 않으면}
+    \KeywordTok{return}\NormalTok{(f)\} }\CommentTok{#F를 반환}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{scope-of-variable}{%
+\subsection{scope of variable}\label{scope-of-variable}}
+
+\begin{itemize}
+\tightlist
+\item
+  함수 바깥에서 생성된 변수는 같은함수 안에서는 언제나 사용가능
+\item
+  함수 안에서 생성된 변수는 함수가 종료되면 사라짐(local variable은
+  휘발성)
+\item
+  함수 내에서 생성된 변수가 사라지지 않게 하려면
+  ``\textless\textless-''을 할당 연산자로 사용(global variable로 할당)
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# <- 할당 연산자 사용}
+\NormalTok{scopetest <-}\ControlFlowTok{function}\NormalTok{(x)\{}
+\NormalTok{  a <-}\StringTok{ }\DecValTok{10}
+  \KeywordTok{print}\NormalTok{(a)}
+  \KeywordTok{print}\NormalTok{(x)}
+\NormalTok{\}}
+
+\KeywordTok{scopetest}\NormalTok{(}\DecValTok{9}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 10
+## [1] 9
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#print(a) #주석 제거후 함수실행하여 메세지 확인할것}
+
+\CommentTok{# <<- 할당 연산자 사용}
+\NormalTok{scopetest <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x)\{}
+\NormalTok{  a <<-}\StringTok{ }\DecValTok{10}
+  \KeywordTok{print}\NormalTok{(a)}
+  \KeywordTok{print}\NormalTok{(x)}
+\NormalTok{\}}
+
+\KeywordTok{scopetest}\NormalTok{(}\DecValTok{9}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 10
+## [1] 9
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{print}\NormalTok{(a)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 10
+\end{verbatim}
+
+\hypertarget{uxd568uxc218uxc758-default-uxac12-uxc124uxc815}{%
+\subsubsection{함수의 default 값
+설정}\label{uxd568uxc218uxc758-default-uxac12-uxc124uxc815}}
+
+\begin{itemize}
+\tightlist
+\item
+  인수를 입력하지 않았을때 자동으로 적용되는 값을 default라고 함
+\item
+  함수작성시 ``인수=T 또는 인수=10'' 이런식으로 미리 인수에 적용될 값을
+  입력
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{add10 <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(}\DataTypeTok{x=}\DecValTok{10}\NormalTok{)x}\OperatorTok{+}\DecValTok{10}
+\KeywordTok{add10}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 20
+\end{verbatim}
+
+\hypertarget{pr7-uxc5f0uxc2b5uxbb38uxc81c}{%
+\section{PR7 연습문제}\label{pr7-uxc5f0uxc2b5uxbb38uxc81c}}
+
+\hypertarget{uxbb38uxc81c-1}{%
+\subsection{문제 1}\label{uxbb38uxc81c-1}}
+
+\begin{itemize}
+\tightlist
+\item
+  PR3의 연습문제 1번을 활용한 문제입니다.
+\item
+  벡터 prices에 저장된 값은 2020-03-01 부터 2020-03-06 까지 bitcoin의
+  종가이다. *prices \textless- c(11905000.0, 1973000.0, 12190000.0,
+  12700000.0, 12303000.0, 12604000.0)
+\item
+  힌트를 참고하여 순서대로 2020-03-02 부터 2020-03-06 까지 5일간의
+  수익률을 구하는 in\_rate 함수를 작성하세요.
+\item
+  함수를 사용하여 증가율을 출력해 주세요. \emph{HINT 수익율 = ((금일의
+  종가 - 전일의 종가)/전일의 종가)}100
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{prices <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\FloatTok{11905000.0}\NormalTok{, }\FloatTok{11973000.0}\NormalTok{, }\FloatTok{12190000.0}\NormalTok{, }\FloatTok{12700000.0}\NormalTok{, }\FloatTok{12303000.0}\NormalTok{, }\FloatTok{12604000.0}\NormalTok{)}
+
+\NormalTok{in.rate <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(a)\{             }\CommentTok{#Define}
+\NormalTok{  price_today <-}\StringTok{ }\NormalTok{a[}\OperatorTok{-}\DecValTok{1}\NormalTok{]}
+\NormalTok{  price_yesterday <-}\StringTok{ }\NormalTok{a[}\OperatorTok{-}\KeywordTok{length}\NormalTok{(a)]}
+\NormalTok{  returns <-}\StringTok{ }\NormalTok{(price_today }\OperatorTok{-}\StringTok{ }\NormalTok{price_yesterday) }\OperatorTok{/}\StringTok{ }\NormalTok{price_yesterday }\OperatorTok{*}\StringTok{ }\DecValTok{100}
+  \KeywordTok{return}\NormalTok{(returns)}
+\NormalTok{\}}
+
+\KeywordTok{in.rate}\NormalTok{(prices)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1]  0.5711886  1.8124113  4.1837572 -3.1259843  2.4465578
+\end{verbatim}
+
+\hypertarget{uxbb38uxc81c-2}{%
+\subsection{문제 2}\label{uxbb38uxc81c-2}}
+
+\begin{itemize}
+\tightlist
+\item
+  PR5의 연습문제 1번을 활용하는 문제입니다.
+\item
+  URL을 입력받아서 해당 웹사이트의 Table list를 반환하는 함수
+  read.html.tables를 작성하세요.
+\item
+  웹사이트의 URL을 입력하여 결과값을 저장하고, 특정 테이블을 head를
+  사용해서 출력해주세요.(웹사이트 자율)
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+  \KeywordTok{library}\NormalTok{(XML)}
+  \KeywordTok{library}\NormalTok{(httr)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: package 'httr' was built under R version 3.6.3
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{read.html.tables <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(URL)\{      }\CommentTok{#웹의 content를 불러오는 read.html.tables 함수를 Define해줍니다.}
+
+\NormalTok{  html_source <-}\StringTok{ }\KeywordTok{GET}\NormalTok{(URL)}
+\NormalTok{  tabs <-}\StringTok{ }\KeywordTok{readHTMLTable}\NormalTok{(}\KeywordTok{rawToChar}\NormalTok{(html_source}\OperatorTok{$}\NormalTok{content), }\DataTypeTok{stringsAsFactors =}\NormalTok{ F)}
+  \KeywordTok{return}\NormalTok{(tabs)}
+\NormalTok{\}}
+
+\NormalTok{KoreaPopulation <-}\KeywordTok{read.html.tables}\NormalTok{(}\StringTok{"https://www.worldometers.info/world-population/south-korea-population/"}\NormalTok{) }\CommentTok{#read.html.tables 함수를 call하여 변수에 할당}
+\NormalTok{ForecastKorPOP <-}\StringTok{ }\NormalTok{KoreaPopulation[}\DecValTok{2}\NormalTok{]       }\CommentTok{#테이블 리스트중 한국 인구예측 테이블을 서브세팅해줍니다.}
+
+\KeywordTok{names}\NormalTok{(ForecastKorPOP) <-}\StringTok{ }\NormalTok{ForecastKorPOP    }\CommentTok{#해당 테이블의 이름이 NULL이므로 이름을 지어줍니다.}
+\KeywordTok{head}\NormalTok{(ForecastKorPOP,}\DecValTok{5}\NormalTok{) }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## $...
+##    Year Population Yearly %  Change Yearly Change Migrants (net) Median Age
+## 1  2020 51,269,185           0.09 %        43,877         11,731       43.7
+## 2  2019 51,225,308           0.10 %        53,602         11,731       41.4
+## 3  2018 51,171,706           0.15 %        75,291         11,731       41.4
+## 4  2017 51,096,415           0.22 %       112,958         11,731       41.4
+## 5  2016 50,983,457           0.32 %       160,364         11,731       41.4
+## 6  2015 50,823,093           0.51 %       255,491         80,237       40.8
+## 7  2010 49,545,636           0.34 %       168,913        -31,309       38.0
+## 8  2005 48,701,073           0.55 %       264,366         16,245       34.8
+## 9  2000 47,379,241           0.90 %       417,344         31,886       31.9
+## 10 1995 45,292,522           1.08 %       474,821         14,284       29.3
+## 11 1990 42,918,419           1.02 %       422,803         34,116       27.0
+## 12 1985 40,804,402           1.41 %       551,759         18,578       24.3
+## 13 1980 38,045,607           1.46 %       533,389        -33,027       22.1
+## 14 1975 35,378,661           1.90 %       636,596        -41,988       19.9
+## 15 1970 32,195,681           2.19 %       660,025        -16,369       19.0
+## 16 1965 28,895,558           2.67 %       713,209        -13,827       18.4
+## 17 1960 25,329,515           3.32 %       762,989         62,079       18.6
+## 18 1955 21,514,570           2.29 %       460,637         86,590       18.9
+##    Fertility Rate Density (P/Km짼) Urban Pop % Urban Population
+## 1            1.11              527      81.8 %       41,934,110
+## 2            1.21              527      81.6 %       41,805,375
+## 3            1.21              526      81.4 %       41,678,226
+## 4            1.21              526      81.3 %       41,552,264
+## 5            1.21              524      81.3 %       41,426,777
+## 6            1.23              523      81.3 %       41,301,851
+## 7            1.17              510      81.9 %       40,601,614
+## 8            1.21              501      81.4 %       39,622,010
+## 9            1.50              487      79.6 %       37,729,427
+## 10           1.68              466      78.2 %       35,441,319
+## 11           1.57              441      73.9 %       31,696,103
+## 12           2.23              420      64.9 %       26,474,831
+## 13           2.92              391      56.7 %       21,582,191
+## 14           4.00              364      48.0 %       16,997,155
+## 15           4.65              331      40.7 %       13,110,502
+## 16           5.60              297      32.4 %        9,351,713
+## 17           6.33              261      27.7 %        7,022,058
+## 18           5.65              221      24.4 %        5,251,885
+##    Country's Share of World Pop World Population South KoreaGlobal Rank
+## 1                        0.66 %    7,794,798,739                     28
+## 2                        0.66 %    7,713,468,100                     28
+## 3                        0.67 %    7,631,091,040                     28
+## 4                        0.68 %    7,547,858,925                     27
+## 5                        0.68 %    7,464,022,049                     27
+## 6                        0.69 %    7,379,797,139                     27
+## 7                        0.71 %    6,956,823,603                     26
+## 8                        0.74 %    6,541,907,027                     25
+## 9                        0.77 %    6,143,493,823                     24
+## 10                       0.79 %    5,744,212,979                     24
+## 11                       0.81 %    5,327,231,061                     24
+## 12                       0.84 %    4,870,921,740                     23
+## 13                       0.85 %    4,458,003,514                     23
+## 14                       0.87 %    4,079,480,606                     23
+## 15                       0.87 %    3,700,437,046                     24
+## 16                       0.87 %    3,339,583,597                     24
+## 17                       0.83 %    3,034,949,748                     24
+## 18                       0.78 %    2,773,019,936                     24
+\end{verbatim}
+
+\hypertarget{uxbb38uxc81c-3}{%
+\subsection{문제 3}\label{uxbb38uxc81c-3}}
+
+\begin{itemize}
+\item
+  어떤 문제를 수치 계산으로 풀지 않고 확률(난수)를 이용해서 푸는 것을
+  몬테카를로법이라 한다.이방법으로 원주율 파이를 구할 수 있다.
+  \textbf{각 도형의 면적} * 반지름이ㅣ 1인 원 면적의 1/4 = 1/4 x pi X
+  1\^{}2 = pi/4 * 한 변이 1인 정사각형의 면적 = 1\^{}2 = 1 \textbf{공식
+  유도} 1. 1/4원 내부에 표시된 난수 개수 : a 2. 1/4원 외부에 표시된 난수
+  개수 : b 3. pi/4:1 = a:a+b 4. pi = 4a/a+b = 4a/n \textbf{이미지는
+  PR본문참고}
+
+  \begin{itemize}
+  \item
+    점을 뽑을 갯수 n을 입력받아 파이를 추정하는 함수 mc\_pi를
+    작성하세요.
+  \item
+    점을 100개,1000개,10000개,100000개 뽑았을 떄 추정된 파이를 출력하고
+    실제 파이값과 가까워지는지 확인하세요. * HINT1 : 난수생성함수
+    runif(n,min=0,max=1) * 0 에서 1 사이의 난수를 n개 생성 (default) *
+    HINT2 : 좌표평면상의 점이므로,각각 n개의 x값과 y값이 필요합니다.
+    두점과 원점 (0,0)사이의 거리는 다음과 같이 구할 수 있습니다.
+
+\begin{verbatim}
+ *distance = sqrt(x^2 + y^2)
+\end{verbatim}
+  \end{itemize}
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{vec <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{100}\NormalTok{, }\DecValTok{1000}\NormalTok{, }\DecValTok{10000}\NormalTok{, }\DecValTok{100000}\NormalTok{)}
+
+\ControlFlowTok{for}\NormalTok{(v }\ControlFlowTok{in}\NormalTok{ vec)\{}
+  \KeywordTok{cat}\NormalTok{(}\StringTok{"n = "}\NormalTok{,v,}\StringTok{"일 때 추정된 PI :"}\NormalTok{,}\StringTok{"mc_pi(v)"}\NormalTok{,}\StringTok{"}\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+  \CommentTok{#print(paste0("n =",v,"일 때 추정된 PI :",mc_pi(v),"\textbackslash{}n")))}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## n =  100 일 때 추정된 PI : mc_pi(v) 
+## n =  1000 일 때 추정된 PI : mc_pi(v) 
+## n =  10000 일 때 추정된 PI : mc_pi(v) 
+## n =  1e+05 일 때 추정된 PI : mc_pi(v)
+\end{verbatim}
+
+\end{document}

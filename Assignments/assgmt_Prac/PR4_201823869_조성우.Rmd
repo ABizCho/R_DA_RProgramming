@@ -1,0 +1,516 @@
+---
+title: "PR4_201823869_조성우"
+author: "조성우"
+date: '2020 4 10 '
+output:
+  word_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## 1.Factor
+
+### 1.1. 명목형 자료 만들기
+```{r}
+score <- factor(c(3,2,3,4,3,1,1,3,2,2,1,1,5),
+                levels=c(1,2,3,4),
+                labels=c("A","B","C","D"),
+                ordered=T)
+score
+```
+### 1.2. 명목형 자료로 변환하기
+```{r}
+# 문자를 벡터에 입력하였을때
+fac_char <-c("포도","키위","메론","바나나","딸기")
+attributes(fac_char)
+```
+```{r}
+#문자벡터를 명목형 자료로 변환하였을때
+fac_char = as.factor(fac_char)
+attributes(fac_char)
+```
+### 1.3. 팩터형 자료 빈도 파악
+```{r}
+table(score)
+```
+
+```{r}
+#빈도가 3이상인 데이터만 출력
+tb <- table(score)
+tb[tb>=3]
+```
+### 1.4. 서수형 자료와 명목형 자료의 차이
+```{r}
+score[1] > score[3] #(1)
+```
+
+```{r}
+fac_char[1] > fac_char[2] #(2)
+```
+
+```{r}
+# (1)은 서수형 자료형간의 비교인데 ,서수형 자료형이란 변수가 어떤 기준에 따라 순서판별이 가능한 자료형을 뜻하므로 두 자료간의 비교값이 T/F의 논리형으로 출력되는것이고
+# (2)는 명목형 자료형간의 비교로, 명목형 자료형이란 크기나 순서가 의미가없고 이름만 의미를 부여할 수 있어 변수간 순서판별이 불가능한 자료형을 뜻하므로 비교값을 출력할 수 없다.
+```
+## 2. Matrix
+### 2.1. matrix 생성
+```{r}
+mat <- matrix(1:8, nrow=2 , ncol=4, byrow=T)
+dim(mat) ; length(mat) #dim 함수는 행,열 순으로 차원을 출력
+```
+
+```{r}
+matrix(1:8, nrow=2, ncol=4, byrow=F)
+```
+
+```{r}
+matrix(1:8, nrow=2) #1~8의 수로 2 행 배열
+```
+
+```{r}
+matrix(1:8,ncol=2) #1~8의 수로 2 열 배열
+```
+
+```{r}
+matrix(1:8,ncol=4,byrow=T)
+```
+
+```{r}
+matrix(1:9, nrow=3, ncol=3,
+       dimnames = (list(c("r1", "r2", "r3"), c("c1","c2","c3"))))
+```
+
+### 2.2. matrix 각 차원에 이름 부여
+```{r}
+mat
+```
+
+```{r}
+rownames(mat) <- c("행 1","행 2")
+colnames(mat) <- c("열 1","열 2","열 3","열 4")
+mat
+```
+
+### 2.3. rbind()와 cbind()를 이용한 매트릭스 생성 
+```{r}
+x <- 2:4 ;x
+```
+
+```{r}
+y <- 9:11 ;y
+```
+
+```{r}
+cbind(x,y)
+```
+
+```{r}
+rbind(x,y)
+```
+### 2.4. rbind()와 cbind()를 사용한 데이터 추가
+```{r}
+mat
+```
+
+```{r}
+cbind(mat, 10:11)
+```
+
+```{r}
+rbind(mat,20:23)
+```
+### 2.5. matrix 데이터 접근과 변환
+```{r}
+x <- 1:3 ;x
+```
+
+```{r}
+y <- 10:12 ; y
+```
+
+```{r}
+mat <-cbind(x,y) ; mat
+```
+
+```{r}
+mat[1,1] <- 100 ; mat
+```
+
+```{r}
+mat[2,] <- mat[2,] / 4 ; mat
+```
+
+```{r}
+mat[,2] <- mat[,2] - mat[,1]*3 ; mat
+```
+
+## 3.List
+
+### 3.1. 여러 벡터를 이용해 리스트 만들기
+```{r}
+str_vec <- c("korea","USA", "Japan") #문자열 벡터
+num_vec <- c(100,200,300,400,500) #숫자 벡터
+mat <- matrix(2:9,2,4)
+list_tot <- list(str_vec,num_vec,mat)
+print(list_tot)
+```
+
+```{r}
+names(list_tot) <- c('str_vec','num_vec','mat');list_tot
+```
+### 3.2. list 함수 내에서 성분의 이름 지정하여 리스트 만들기
+```{r}
+list_tot2 = list(seq = seq(1,10,2),
+                 str = c("토끼","사자","코끼리","양"),
+                 plus = rep(c('고구마','감자','옥수수'),2))
+print(list_tot2)
+```
+### 3.3. 데이터의 속성을 확인하는 다양한 함수
+```{r}
+class(list_tot)
+```
+
+```{r}
+length(list_tot)
+```
+
+```{r}
+attributes(list_tot)
+```
+
+```{r}
+str(list_tot)
+```
+### 3.4. 리스트의 성분에 접근하기
+```{r}
+# []연산자 또는 $연산자를 활용해 추출
+
+list_tot2[1] #첫번째 성분
+```
+
+```{r}
+list_tot2[3]
+```
+
+```{r}
+list_tot2[1:2]
+```
+
+```{r}
+list_tot2$seq #'seq'라는 성분
+```
+
+```{r}
+list_tot2$str
+```
+### 3.5. 리스트의 성분안에 있는 원소에 접근하기
+```{r}
+#[[]]연산자 또는 $연산자와 []로 추출
+list_tot[[3]][1] #3번째 성분의 첫번째 원소
+```
+
+```{r}
+list_tot2$seq[3] #seq 성분의 세번째 원소
+```
+
+```{r}
+list_tot2$str[1:2]
+```
+### 3.6 리스트의 성분이나 원소 조작하기
+```{r}
+#성분이나 원소 삭제 또는 추가하기
+
+list_tot[1] <- NULL #첫번째 성분 삭제
+str(list_tot)
+```
+
+```{r}
+list_tot2$str[1] <- "고양이" #str 성분 첫번째 원소 덮어쓰기
+str(list_tot2)
+```
+
+```{r}
+list_tot$NEW <- 2:5 #새로운 성분 추가
+str(list_tot)
+```
+### 3.7. 리스트의 성분에 하위 리스트 추가하여 계층적으로 리스트 만들기
+```{r}
+list_tot$hierarchy[[1]] <- list_tot2 #리스트의 hierarchy라는 성분에 list_tot2를 할당
+str(list_tot)
+```
+## 4. Array
+### 4.1. Array 생성하기
+```{r}
+# array 함수로 array 생성하기 
+arr <- array(1:18, dim=c(3,3,2),
+             dimnames=list(c("KOR","CHI","JAP"),
+                           c("GDP.R","USD.R","Cuur.Acc"),
+                           c("2011Y","2012Y")))
+arr
+```
+
+```{r}
+#벡터 생성후 차원을 배열하여 array로 변환하기
+arr1 <- 1:18
+dim(arr1) <- c(3,3,2)
+dimnames(arr1) <-list(c("KOR","CHI","JAP"),
+                      c("GDP.R","USD.R","Cuur.Acc"),
+                      c("2011Y","2012Y"))
+arr1
+```
+
+```{r}
+arr1 == arr #앞에서 만든 배열과 같은지 비교교
+```
+### 4.2. Array 조작 방법
+#### 4.2.1 [,,] 인덱싱으로 각 원소에 접근하기
+```{r}
+arr
+```
+
+```{r}
+arr[1,,]
+```
+
+```{r}
+arr[,-2,] #3 개국의 GDP.R 와 Cuur.Acc
+```
+
+```{r}
+arr[,,2]#3개국의 2012년 자료
+```
+
+```{r}
+arr[,,'2012Y']#이름으로 추출(3개국의 2012년 자료)
+```
+
+```{r}
+arr[c(T,T,F),,2]#한국,중국의 2012년 자료 - 일본 제외
+```
+
+```{r}
+arr[-2,,2] #한국,일본의 2012년 자료 - 중국 제외
+```
+#### 4.2.2. 배열원소의 추출 및 수정
+```{r}
+arr.tmp <- arr
+arr.tmp
+```
+
+```{r}
+arr.tmp[,,1] <-c(5,6,4)
+arr.tmp
+```
+
+```{r}
+arr.tmp[,1,2] <-NA
+arr.tmp
+```
+
+```{r}
+arr.tmp[is.na(arr.tmp)] <- c(8,5,2)
+arr.tmp
+```
+## 5. 기타
+### 5.1 NA값 다루기
+```{r}
+# is.na함수와 complete.cases 하무를 사용해 결측값 파악하기
+
+x <- c(1,2,NA,4,NA,5)
+is.na(x) #NA값 여부에 대한 논리 판단 결과 
+```
+
+```{r}
+bad <- is.na(x) #벡터 x의 na값 여부에 대한 논리판단결과를 bad에 할당
+y <- x[!bad] # bad에 할당된 논리판단결과룰 역으로 바꾸고 T에 해당하는 항과 같은 위치의 x의 항을 y에 할당(결과적으로 na가 배제됨)
+mean(y) #그 값의 평균산출
+```
+
+```{r}
+x <- c(1,2,NA,4,NA,5)
+good <- complete.cases(x)
+x[good]
+```
+#PR4 연습문제
+###### 다음은 2015~2020년 대한민국 경제활동인구에 관한 통계 중 실업률에 관한 내용이다.
+###### 남성실업률 : 3.8 3.4 3.2 3.1 3.8 3.2 3.2 2.9 3,9 3,6 3.4 3.3 4.0 3.8 3.6 3.2 4.3 3.8 3.7 3.2 4.2 4.0 3.7 3.4
+###### 여성실업률 : 3.7 3.0 2.7 2.5 3.3 2.9 2.6 2.6 4.0 3.7 3.1 3.1 4.2 3.8 3.2 3.0 4.2 3.6 3.3 3.2 4.4 3.7 3.2 2.9
+###### 실업률 : (남성실업률+여성실업률)/2
+
+## 문제 1.
+###### 위를 참고하여 아래와 같은 list를 만들어 보세요.
+###### list의 이름은 unemploy_rate_list로 지정해 주세요.
+###### 남/여성 전체 실업률을 구해서 추가해보세요.
+
+```{r}
+country = "korea"
+start = 2015
+end = 2020
+type = "quarterly"
+M_UR = c(3.8, 3.4, 3.2, 3.1, 3.8, 3.2, 3.2, 2.9, 3.9, 3.6, 3.4, 3.3, 4.0, 3.8, 3.6, 3.2, 4.3, 3.8, 3.7, 3.2, 4.2, 4.0, 3.7, 3.4) #남성실업률
+F_UR = c(3.7, 3.0, 2.7, 2.5, 3.3, 2.9, 2.6, 2.6, 4.0, 3.7, 3.1, 3.1, 4.2, 3.8, 3.2, 3.0, 4.2, 3.6, 3.3, 3.2, 4.4, 3.7, 3.2, 2.9) #여성실업률
+
+
+unemploy_rate_list <- list(country ,start ,end ,type ,M_UR ,F_UR)
+names(unemploy_rate_list) <- c("country","start","end","type","M_UR","F_UR")
+
+
+total_UR  <- numeric(24) #총 실업률 변수선언 및 총실업률 계산
+for (i in 1:24){
+ total_UR[i]  <- ( M_UR[i] + F_UR[i]) / 2
+}
+total_UR
+
+unemploy_rate_list$total_UR <- total_UR;unemploy_rate_list #unemploy_rate_list에 전체실업률 성분 추가 후 출력
+
+```
+## 문제 2.
+###### 문제 1에서 만든 리스트를 다음과 같이 자유롭게 조작해보세요. (성분삭제하기,원소덮어쓰기,성분추가하기)
+###### 각 조작한 내용은 조작후 결과를 모두 출력해주세요.
+```{r}
+unemploy_rate_list[c(1,3)] <- NULL;unemploy_rate_list #country와 end 성분 삭제
+unemploy_rate_list$start[1] <- 2020;unemploy_rate_list  #원소 덮어쓰기 2015 -> 2020 
+unemploy_rate_list$seq <- seq(50,100,2);unemploy_rate_list #성분 추가하기
+```
+## 문제 3.
+###### 위를 참고하여 아래와 같은 array를 만들어 보세요.
+###### array 이름은 unemploy_rate_arr 로 지정해주세요.
+###### Hint: 1.남성 2.여성 3.전체실업률
+```{r}
+country = "korea"
+start = 2015
+end = 2020
+type = "quarterly"
+M_UR = c(3.8, 3.4, 3.2, 3.1, 3.8, 3.2, 3.2, 2.9, 3.9, 3.6, 3.4, 3.3, 4.0, 3.8, 3.6, 3.2, 4.3, 3.8, 3.7, 3.2, 4.2, 4.0, 3.7, 3.4) #남성실업률
+F_UR = c(3.7, 3.0, 2.7, 2.5, 3.3, 2.9, 2.6, 2.6, 4.0, 3.7, 3.1, 3.1, 4.2, 3.8, 3.2, 3.0, 4.2, 3.6, 3.3, 3.2, 4.4, 3.7, 3.2, 2.9) #여성실업률
+
+
+unemploy_rate_list <- list(country ,start ,end ,type ,M_UR ,F_UR)
+names(unemploy_rate_list) <- c("country","start","end","type","M_UR","F_UR")
+
+
+total_UR  <- numeric(24) #총 실업률 변수선언 및 총실업률 계산
+for (i in 1:24){
+ total_UR[i]  <- ( M_UR[i] + F_UR[i]) / 2
+}
+total_UR
+
+unemploy_rate_list$total_UR <- total_UR;unemploy_rate_list #unemploy_rate_list에 전체실업률 성분 추가 후 출력
+
+#--------------------------------------------------------------------------------------------
+
+unemploy_rate_arr <- c(M_UR,F_UR,total_UR);unemploy_rate_arr
+
+dim(unemploy_rate_arr) <-c(4,6,3) 
+dimnames(unemploy_rate_arr) = list(c("1/4","2/4","3/4","4/4"),c('2015Y','2016Y','2017Y','2018Y','2019Y','2020Y'),c('man_unemp','women_unemp','total_unemp'))
+unemploy_rate_arr
+```
+## 문제 4.
+###### 문제 3에서 만든 array에서 2017Y의 자료를 제외한 남성,여성,총 실업률을 출력해보세요
+###### 문제 3에서 만든 array에서 총 실업률만 출력해보세요
+```{r}
+print("2017년도 제외 남성,여성, 총 실업률 출력")
+a <- unemploy_rate_arr[,-3,];a#2017년도 제외 남성,여성, 총 실업률 출력
+print("총실업률만 출력")
+b <- unemploy_rate_arr[,,3];b #총실업률만 출력
+```
+# PR 4 도전문제
+######다음은 가우스.조던법을 이용하여 연립방정식의 해를 구하는 방법을 서술한 것입니다. 문제에 대한 풀이를 작성할 시에 과정을 통해 도출되는 matrix의 결과값 외의 설명은 출력될 필요는 없습니다.
+
+# 문제1.
+```{r}
+#과정1
+print("과정1")
+mat0<-matrix(c(2,3,1,4,4,1,-3,-2,-1,2,2,2),nrow=3,ncol=4,byrow=T);mat0
+
+#과정2
+print("과정2")
+mat0[1,]<-mat0[1,]/2;mat0
+
+#과정3
+print("과정3")
+mat1 = mat0
+mat1[2,] <- mat0[2,] - mat0[1,]*4
+mat1[3,] <- mat0[3,] - mat0[1,]*(-1) ;mat1
+
+#과정4
+print("과정4")
+mat1[2,] <- mat1[2,]/-5 ;mat1
+
+#과정5
+print("과정5")
+mat2 = mat1
+mat2[1,] <- mat1[1,] - mat1[2,] * 1.5
+mat2[3,] <- mat1[3,] - mat1[2,] * 3.5;mat2
+
+#과정6
+print("과정6")
+mat2[3,] <- mat2[3,]/-1;mat2
+
+#과정7
+print("과정7")
+mat3 = mat2
+mat3[1,] <- mat2[1,] - mat2[3,] * (-1)
+mat3[2,] <- mat2[2,] - mat2[3,] * 1;mat3
+
+cat("해 x: ",mat3[1,4],",y: ",mat3[2,4],",z: ",mat3[3,4])
+```
+# 문제2.
+```{r}
+
+#짝수번호의 과정은 그대로하되, 홀수번호(3~부터)의 과정에 제시된 %*% 의 행렬곱셈과 항등행렬 변형의 활용을 적용시켰다.
+
+matz <- matrix(c(1,0,0,0,1,0,0,0,1),3,3);matz #Hint에서 제시한 항등행렬 matz 생성
+matx = matz  #홀수번호(3~)의 과정마다 항등행렬이 새로 사용될것을 대비하여 편의를 위해 matx에 그대로 입력
+
+
+#과정1
+print("과정1")
+
+mat0<-matrix(c(2,3,1,4,4,1,-3,-2,-1,2,2,2),nrow=3,ncol=4,byrow=T);mat0
+
+#과정2
+print("과정2")
+mat0[1,]<-mat0[1,]/2;mat0
+
+#과정3
+print("과정3")
+
+matx[2,1] <- matx[1,1]*-4
+matx[3,1] <- matx[1,1]*-(-1) 
+
+mat0 <- matx %*% mat0;mat0
+
+#과정4 
+print("과정4")
+
+mat0[2,] <- mat0[2,] / -5;mat0
+
+#과정5
+print("과정5")
+
+matx = matz
+matx[1,2] <- matx[2,2]*-1.5
+matx[3,2] <- matx[2,2]*-3.5
+
+mat0 <- matx %*% mat0;mat0
+
+#과정6
+print("과정6")
+
+
+mat0[3,] <- mat0[3,]/-1;mat0
+
+#과정7
+print("과정7")
+
+matx = matz
+matx[1,3] <- matx[3,3]*-(-1)
+matx[2,3] <- matx[3,3]*-1
+
+mat0 <- matx %*% mat0;mat0
+```
+
+

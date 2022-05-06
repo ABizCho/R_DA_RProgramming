@@ -1,0 +1,7 @@
+code date age type symptom
+1 2014-10-15   25  Type1      Poor
+2 2014-11-01   34  Type2  Improved
+3 2014-10-21   28  Type1 Excellent
+4 2014-10-28   52  Type1      Poor
+5 2014-11-01   37  Type2  Improved
+6 2014-11-01   40  Type2  Improved

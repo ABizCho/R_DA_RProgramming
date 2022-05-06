@@ -1,0 +1,446 @@
+---
+title: "PR5_201823869_조성우"
+author: "조성우"
+date: '2020년 4월 17일 '
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Dataframe
+## 1.벡터를 이용해 데이터프레임 만들기
+```{r}
+name <- c("boil","Tom","Ravindra","Bob","Sobia")
+gender <- c('M','M','F','M','F')
+age <- c(17,21,33,12,37)
+marriage <- c(F,T,F,F,T)
+
+#stringsAsFactors 인수 없이 만들기
+customer <- data.frame(name,gender,age,marriage)
+str(customer)
+```
+
+```{r}
+#stringsAsFactors=F 사용해서 만들기
+customer=data.frame(name,gender,age,marriage,stringsAsFactors = F)
+str(customer)
+```
+
+```{r}
+#data.frame 함수와 관련된 다양한 함수 사용하기
+str(customer) #데이터프레임의 구조 확인
+```
+
+```{r}
+names(customer) #데이터프레임의 열이름을 확인
+```
+
+```{r}
+rownames(customer) #데이터프레임의 행 이름을 확인
+```
+## 2. Data Frame 변수명 바꾸기
+```{r}
+# colnames,rownames 함수로 변수명 반환 및 확인
+
+colnames(customer)
+```
+
+```{r}
+rownames(customer)
+```
+
+```{r}
+colnames(customer) <- c("cust_name","cust_gend","cust_age","cust_mrg")
+rownames(customer) <- c('a','b','c','d','e')
+customer
+```
+## Data Frame 데이터 추출
+```{r}
+#접근 방식은 matrix와 동일
+#[행,열]연산자 및 $연산자 활용하여 데이터에 접근하기
+customer[1,] ; customer["a",] #첫번째 행 숫자 및 rowname 으로 추출
+```
+
+```{r}
+customer[customer$cust_name=="Tom",] #cust_name 컬럼이 Tom인 row만 추출
+```
+
+```{r}
+customer[2:5,] ; customer[-1,] #2~5 행
+```
+
+```{r}
+customer[customer$cust_name!="Tom",] #cust_name이 컬럼이 Tom이 아닌 row
+```
+
+```{r}
+customer[c("b","c"),]
+```
+## 4. Data Frame 에 데이터추가
+```{r}
+#이름으로 추가,
+customer$cust_height <- c("185","165","156","174","155")
+customer["f",] <- list("Jack","M",50,T,"167")
+customer
+```
+
+```{r}
+#cbind, rbind 로 추가 
+customer <- cbind(customer,weight = c(80,70,65,48,55,100))
+customer <- rbind(customer,g=list("Merry","F",42,F,"172",60))
+customer <- rbind(customer,h=c("Merry",F,42,F,"172",60))
+customer
+```
+## 5. Data Frame 에 데이터삭제
+```{r}
+customer <- customer[,-5] #1 번째 컬럼을 빼고 나머지만 다시 할당
+customer <- customer[-7,] #7 번째 로우를 빼고 나머지만 다시 할당
+customer$weight <- NULL #weight 컬럼 삭제
+```
+## 6. Data 조건문을 활용해 조작하기
+```{r}
+# 이부분은 모든 코드에 주석달것!
+# &와 |연산자로 여러개의 조건을 사용할 수 있음
+
+customer[customer$cust_gend=="M",]
+```
+
+```{r}
+customer[customer$cust_gend!="F",]
+```
+
+```{r}
+nrow(customer[customer$cust_gend=="m"]) #nrow는 행의 개수를 보여줌
+```
+
+```{r}
+customer[customer$cust_name =="Bob", c("cust_age","cust_mrg")]
+```
+
+```{r}
+customer[customer$cust_name =="Tom" | customer$cust_name=="Ravindra",]
+```
+```{r}
+customer[customer$cust_gend=="M" & customer$cust_age>24, ]
+```
+## 7. Data frame 정렬하기
+```{r}
+#order 함수를 활용해 순서를 구하여, row 조건에 넣어서 정렬
+#decreasing=T 인수를 활용하여 오름차순, 내림차순 변경 가능
+
+order(customer$cust_age) #order 함수로 age에 대한 순서를 구함
+```
+
+```{r}
+customer[order(customer$cust_age),] #row의 조건에 위에서 구한 순서를 넣음
+```
+
+```{r}
+q
+```
+
+```{r}
+order(customer$cust_age, decreasing=F) #오름차순
+```
+
+```{r}
+customer[order(customer$cust_age, decreasing=F),]
+```
+## Data frame 기타 함수
+```{r}
+#head, tail 함수는 데이터프레임이 상위,하위 row를 출력함
+# 기본 6개를 출력하며, row 수를 지정할수 있음
+
+head(customer) #상우 6개 row
+```
+
+```{r}
+head(customer,2) #상위 2개 row
+```
+
+```{r}
+tail(customer,2) #하위 2개 row
+```
+# 파일 입출력
+## 1. 내장데이터 불러오기
+```{r}
+#MASS 패키지에는 다양한 데이터가 들어있음
+
+#install.packages("MASS")
+library(MASS)
+#Iris 데이터셋
+#붓꽃의 종과 sepal 과 petal 의 너비와 길이에 대한 데이터
+head(iris)
+```
+
+```{r}
+str(iris)
+```
+
+```{r}
+# mtcars 데이터셋
+# 자동차 차종별 상세스펙에 대한 데이터
+head(mtcars)
+```
+
+```{r}
+str(mtcars)
+```
+
+```{r}
+# USArrests 데이터셋
+# 1973년도 50 개 주에서 수집된 범죄기록 데이터
+head(USArrests)
+```
+
+```{r}
+str(USArrests)
+```
+## 2. file로 저장된 데이터 불러오기
+```{r}
+getwd()
+
+# read.csv()함수
+# header = T (첫행 컬럼명으로 사용)
+# row.names = 1 (첫열 로우명으로 사용)
+# sep = "," (입력된 데이터를 구분해주는 기호)
+# na.strings = c("Na","nan") (NA값으로 처리할 문자열 정의)
+# fileEncoding = "UTF-8" (문자열을 특정 형식으로 재인코딩)
+# encoding = "UTF-8" (불러들일 file의 인코딩을 미리 선언)
+# stringsAsFactors = F
+
+#그냥 읽어오기
+csv <- read.csv("read_csv.csv") ; csv
+```
+
+```{r}
+str(csv)
+```
+
+```{r}
+getwd()
+```
+
+```{r}
+# header, stringsAsFactors 사용
+# 불러온 데이터가 어떻게 바뀌는지 확인해보세요
+csv2 <- read.csv("read_csv.csv", header=F,stringsAsFactors =F) ; csv2
+```
+
+```{r}
+str(csv2)
+```
+
+```{r}
+#결측값 처리하기
+#(".","N.A.","") 3 가지문자를 모두 NA 로 인식하도록 함
+csv3 <- read.csv("csv_NA.csv", header=F, stringsAsFactors=F,na.strings=c(".","N.A.","")) ; csv3
+```
+
+```{r}
+str(csv3)
+```
+
+```{r}
+#인코딩 문제 해결하기
+#불러올 파일의 인코딩을 UTF-8로 지정
+csv4 <- read.csv("csv_NA.csv", header=F,stringsAsFactors=F,
+                 encoding="UTF-8") ; csv4
+```
+
+```{r}
+str(csv4)
+```
+
+```{r}
+# read.table()함수
+# table 형태로 저장된 2차원의 데이터를 불러옴
+# txt 파일이나 csv 파일을 볼러올수 있음
+#불러온 데이터는 데이터프레임으로 생성
+#read.csv()함수와 동일하게 인수를 사용
+table <- read.table("read_csv.csv", header=F,sep=",",stringsAsFactors=F)
+table
+```
+## 3. 웹에 있는 표를 읽어오기 readHTMLTable()
+```{r}
+#install.packages(c("XML","httr"))
+library(XML)
+library(httr)
+
+url <- "http://www.worldometers.info/world-population/"
+
+html_source <- GET(url) #html 전체 소스를 받아옴
+tabs <- readHTMLTable(rawToChar(html_source$content), stringsAsFactors =F)
+
+world_pop <- tabs$popbycountry # 추출된 테이블 들 중에서 원하는 테이블 선택 및 저장
+head(world_pop)
+```
+## 4.데이터 저장하기
+```{r}
+# write.table 또는 write.csv 함수 사용
+# row.names=F 는 ,해당 인수를 T로 줄 경우 행 이름이 첫 열로 이동하여 저장되기 때문
+table
+```
+
+```{r}
+write.table(table,"PR_table.csv")
+write.table(table,"PR_table1.csv",row.names=F)
+write.csv(table,"PR_table2.csv",row.names=F)
+```
+# PR5 연습문제
+###### 다음은 전세계 covid-19 확진자에 대한 정보를 제공하는 웹사이트입니다.
+###### https://www.worldometers.info/coronavirus/
+###### 각 열의 데이터들의 의미이며 다음에 제시된 열들만 사용하도록 하겠습니다.
+######    1열 : 국가명
+######    2열 : 총 확진자 수
+######    3열 : 추가 확진자 수
+######    4열 : 총 사망자 수
+######    5열 : 추가 사망자 수
+######    6열 : 총 완치자 수
+######    9열 : 인구 100만명 당 확진자 수
+######    13열: 대륙명
+
+## 문제 1
+###### 해당 웹사이트에 있는 COVID-19에 대한 테이블을 읽어오고, 하루 전의 데이터를 covid_yesterday에 할당하세요.
+```{r}
+library(XML)
+library(httr)
+url <- "https://www.worldometers.info/coronavirus/"
+
+html_source <- GET(url) #html 전체 소스를 받아옴
+tabs <- readHTMLTable(rawToChar(html_source$content), stringsAsFactors = F)
+covid_yesterday <- tabs$main_table_countries_yesterday 
+
+head(covid_yesterday,20)
+```
+###### 문제 1.1. str 함수를 사용해 저장된 변수의 구조를 출력해보고 저장된 형식의 문제점을 파악해 보세요.
+```{r}
+str(covid_yesterday)
+
+# 1. 해당 covid_yesterday 데이터 프레임의 NewCasessk NewDeaths 변수의 데이터값에는 값에 특수문자 +(플러스)가 붙어있고 모든 값은 천단위로 절사되어 ,(쉼표)로 끊어져있는 char(문자열)데이터로 구성되어있습니다. 이후 문제 4.1에서와 같이 데이터를 '수(numeric)'로 변환하여 처리해 주어야 하는 경우를 위해 우선 이러한 character형식의 데이터들의 특수문자를 지워주는 전처리가 필요할 것이라고 생각합니다.
+
+
+#3. 해당 데이터프레임의 1~7행까지의 데이터는 대륙별 데이터를 8행은 전세계 데이터를 9행 부터는 국가별 데이터를 포함하고 있는데 이 자료가 모두 한가지 데이터프레임으로 구성되어있어 이후의 자료처리에 혼선이 생길것입니다.
+```
+###### 문제 1.2. 왜 그런 문제가 생겼을지 유추해보세요.
+```{r}
+# 데이터를 불러들여온 사이트에 게시된 데이터가 사용자의 가독성을 위해 자동적으로 천단위의 절사가 ,(쉼표)로 표기되는 데이터 처리 응용프로그램(ex : excel)을 기반으로 작성/게시 되었고. 그것을 r에 크롤링해 올 때 데이터가 character로 변환된 채로 넘어와 그런것이 아닐까 생각합니다. 
+```
+###### 문제 1.3. 문제점을 나름대로 해결해보고 해결과정을 서술하세요.
+###### HINT: gsub("패턴","패턴을 대체할 내용", dataframe$column) 함수는 문자열들에서 특정 문자를 찾고, 이를 명시한 내용으로 대체해 줍니다. 예를 들어 문자열에서 공백을 제거하기 위해 data <- gsub(" ","",data)와 같이 사용하여 변수에 수정된 데이터를 할당해 줍니다.
+```{r}
+#편의를 위해 이름을 미리 변경해주도록 한다. 
+colnames(covid_yesterday) <-c("Country","TotalCases","NewCases","TotalDeaths","NewDeaths","TotalRecovered","ActiveCases","Serious","TotCases_1MPop","Deaths_1MPop","TotalTests","Tests_1MPop","Continent")
+
+covid_yesterday <- covid_yesterday[covid_yesterday$Country!="Diamond Princess",] #업데이트에 제시된대로 Diamond Princess 제외
+
+covid_yesterday$TotalCases <- gsub(",","",covid_yesterday$TotalCases)
+covid_yesterday$NewCases <- gsub(",","",covid_yesterday$NewCases)
+covid_yesterday$TotalDeaths <- gsub(",","",covid_yesterday$TotalDeaths)
+covid_yesterday$NewDeaths <- gsub(",","",covid_yesterday$NewDeaths)
+covid_yesterday$TotalRecovered <- gsub(",","",covid_yesterday$TotalRecovered)
+covid_yesterday$ActiveCases <- gsub(",","",covid_yesterday$ActiveCases)
+covid_yesterday$Serious <- gsub(",","",covid_yesterday$Serious)
+covid_yesterday$TotCases_1MPop <- gsub(",","",covid_yesterday$TotCases_1MPop)
+covid_yesterday$Deaths_1MPop <- gsub(",","",covid_yesterday$Deaths_1MPop)
+covid_yesterday$TotalTests <- gsub(",","",covid_yesterday$TotalTests)
+covid_yesterday$Tests_1MPop <- gsub(",","",covid_yesterday$Tests_1MPop)
+
+```
+###### 문제 1.4. 수정된 데이터를 world_covid_19.csv로 저장해 주세요. (row.names=F)
+```{r}
+write.csv(covid_yesterday,"world_covid19.csv",row.names=F)
+```
+
+## 문제 2
+###### 저장된 world_covid_19.csv의 데이터를 world_covid 란 변수에 읽어오세요.
+```{r}
+world_covid <- read.csv("world_covid19.csv");head(world_covid,10) #가독성을 위해 head처리하겠습니다.
+```
+###### 문제 2.1. 해당 데이터 프레임의 열이름 중 1열을 Country, 9열을 CasePer1M로 수정하고, 서두에서 사용한다고 언급한 열들만 서브셋팅 하여 동일한 변수에 저장해 주세요.
+```{r}
+names(world_covid)[1] <-"Country"
+names(world_covid)[9] <-"CasePer1M"
+
+world_covid <- world_covid[,c(1,2,3,4,5,6,9,13)]
+```
+###### 문제 2.2. world_covid에는 각 대륙별 합산 정보가 섞여 있습니다. 이 문제를 해결할 수 있도록 대륙별 합산 정보가 담긴 데이터 프레임과 각 국가별 정보가 담긴 데이터 프레임을 만들어보세요. (모든 것을  합산한 All 정보는 포함하지 않아도 됩니다.)
+```{r}
+
+#대륙별 합산 정
+Continent_covid <- world_covid[c(1:7),] # world_covid 데이터 프레임의 7행에 존재하는 값이 무엇인지 언급되지 않아있고, 문제 3.1의 백분율 분석결과 해당 행의 데이터가 포함되어야 정확한 100%의 값을 가지기 때문에 대륙에 포함되지 않은 기타값의 데이터라고 판단하여 7행의 데이터까지 Continent_covid에 할당하였습니다.
+Country_covid <- world_covid[-c(1:8),]
+```
+###### 문제 2.3. 두개의 서브셋팅된 데이터프레임을 continent_covid_19.csv와 country_covid19.csv로 저장하세요.
+```{r}
+write.csv(Continent_covid ,"continent_covid_19.csv",row.names=F)
+write.csv(Country_covid,"country_covid.csv",row.names=F)
+```
+## 문제 3 
+
+###### 문제 3.1. 각 대륙별 확진자가 전세계 확진자 대비하여 차지하는 비율을 분석해보세요.
+
+```{r}
+WorldPerConVec = Continent_covid[1:7,2]/world_covid[8,2] *100 #백분율 공식
+WorldPerConVec1 = order(WorldPerConVec,decreasing=T) #전세계 확진자 대비 차지하는 비율이 가장 높은 대륙부터 내림차순으로 정렬
+WorldPerConVec = WorldPerConVec[c(WorldPerConVec1)] #""
+cat("차례대로 \n 유럽,북아메리카,아시아,남아메리카,아프리카,오세아니아,기타대륙 순으로 비중순 정렬 : \n",WorldPerConVec[1:7]) 
+```
+###### 문제 3.2. 아시아에서 한국,중국,일본의 확진자가 차지하는 비율을 분석해 보세요.
+###### HINT: S.Korea , China ,Japan
+
+```{r}
+Asia_covid = Country_covid[Country_covid$Continent == "Asia",] #변수 continent의 값이 "Asia"인 것만 선언 
+as.numeric(Asia_covid[,2])
+T_Asia_covid = sum(Asia_covid[,2])
+
+
+AsiaPerKor = Asia_covid[6,2]/T_Asia_covid *100
+AsiaPerJap = Asia_covid[7,2]/T_Asia_covid *100
+AsiaPerChi = Asia_covid[1,2]/T_Asia_covid *100
+
+cat("아시아 대비 차지하는 비율 내림차순 정렬\n 중국,대한민국,일본 순 : \n",AsiaPerChi, AsiaPerKor, AsiaPerJap)
+```
+## 문제 4 
+###### 문제3의 데이터 프레임을 활용하세요.
+
+###### 문제 4.1. 현재 country_covid에는 인구정보가 없습니다. 주어진 열들에 대한 정보를 통해 각 나라별 인구 수를 계산하고,Population 열로 추가하시오.
+###### HINT : Population = TotalCases/CasePer1M X 1,000,000
+```{r}
+Country_covid$Population <- Country_covid$TotalCases/Country_covid$CasePer1M * 1000000
+head(Country_covid,3)
+```
+###### 문제 4.2. 현재 continent_covid에는 CasePer1M 값이 NA입니다. country_covid를 활용하여 이 값을 채우시오.
+```{r}
+#인구 100만명당 확진자 수
+Country_covid$Population <- as.numeric(Country_covid$Population)
+
+a <- Asia_covid$Population
+a <- sum(a) #아시아 인구 총합
+
+
+#Country_covid의 데이터프레임에서 각 대륙별로 CasePer1M의 평균을 구한 후 Continent_covid의 CasePer1M에 할당
+Continent_covid[1,7] <- mean(Asia_covid$CasePer1M)
+
+Europe_covid = Country_covid[Country_covid$Continent == "Europe",] 
+Continent_covid[3,7] <- mean(Europe_covid$CasePer1M)
+
+N.America_covid = Country_covid[Country_covid$Continent == "North America",] 
+Continent_covid[2,7] <- mean(N.America_covid$CasePer1M)
+
+S.America_covid = Country_covid[Country_covid$Continent == "South America",]
+Continent_covid[4,7] <- mean(S.America_covid$CasePer1M)
+
+AO_covid = Country_covid[Country_covid$Continent == "Australia/Oceania",]
+Continent_covid[5,7] <- mean(AO_covid$CasePer1M)
+
+Africa_covid = Country_covid[Country_covid$Continent == "Africa",]
+Continent_covid[6,7] <- mean(Africa_covid$CasePer1M)
+
+
+Continent_covid
+
+# 앞서 문제 2.2에서 언급했던대로 , world_covid 데이터 프레임의 7행에 존재하는 값이 무엇인지 언급되지 않아있고, 문제 3.1의 백분율 분석결과 해당 행의 데이터가 포함되어야 정확한 100%의 값을 가지기 때문에 대륙에 포함되지 않은 기타값의 데이터라고 판단하여 무명의 7행 데이터까지 Continent_covid에 할당한 상태입니다.
+```

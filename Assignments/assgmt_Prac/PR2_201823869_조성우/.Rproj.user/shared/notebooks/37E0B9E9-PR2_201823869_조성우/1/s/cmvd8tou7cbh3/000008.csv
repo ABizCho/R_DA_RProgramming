@@ -1,0 +1,7 @@
+"0","getwd()"
+"1","[1]"
+"1"," ""C:/Users/JSW/Documents/PR2_201823869_조성우"""
+"1","
+"
+"0","setwd(""C://Program Files//R//R-3.6.2//R_programming"")"
+"2","The working directory was changed to C:/Program Files/R/R-3.6.2/R_programming inside a notebook chunk. The working directory will be reset when the chunk is finished running. Use the knitr root.dir option in the setup chunk to change the working directory for notebook chunks."

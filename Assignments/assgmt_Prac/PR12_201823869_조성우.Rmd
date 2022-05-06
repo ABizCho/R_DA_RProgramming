@@ -1,0 +1,539 @@
+---
+title: "PR12-Data Wrangling"
+author: "조성우"
+date: '2020 6월 10일 '
+output:
+  word_document: default
+  html_document: default
+---
+
+# 1.Data Wrangling with tidyverse
+ * Data wrangling이란, 분석을 진행하기위해 날것(raw)의 데이터를 분석에 적합한 형태로 정형화시키는 작업입니다,
+ * R에서는 tidyverse라는 패키지 생태계를 구성하고 있어서, 일관성있고 쉬운 작업을 가능하게 합니다.
+```{r}
+# install.packages("tidyverse")
+library(tidyverse)
+```
+
+# 2.tidyr
+ *tidyr은 Handley wicham이 만든 데이터의 포맷을 변경하기위한 패키지
+ 
+## tidyr의 주요함수
+```{r}
+#gather() : 데이터를 wide에서 long포맷으로 변경
+#spread() : 데이터를 long에서 wide 포맷으로 변겯
+#seperate() : 단일 열(column)을 복수 열들로 분리
+#unite() : 복수 열(column)들을 단일 열로 결합 
+```
+
+# tidyr 실습데이터 : cases in EDAWR
+  *Dataset to support the Expert Data Analysis with R : EDAWR
+```{r}
+#install.packages("devtools")
+#devtools::install_github("rstudio/EDAWR")
+
+library(EDAWR)
+```
+
+```{r}
+head(cases)
+```
+
+```{r}
+head(pollution)
+```
+
+```{r}
+head(storms)
+```
+
+## 2.1.gather() 함수
+ * wide포맷의 데이터를 원하는 조건에 맞게 long포맷으로 변환하는 함수
+ * gather(데이터,키(key),값(Value),...)
+ *...: 원데이터로 부터 모으기(gather)가 진행될 열들의 범위
+```{r}
+gather(cases, Year,n,2:4)
+```
+
+## 2.2.spread() 함수
+ * long포맷의 데이터를 원하는 조건에 맞게 long포맷으로 변환하는 함수
+ * seperate(데이터,키(key),값(value),~)
+ ** 키(key):복수개의 열로 spread될 기존 long포맷의 열이름
+ **값(Value):복수개의 열로 spread되어 값이 될 기존 long포맷의 열이름
+```{r}
+spread(pollution,size,amount)
+```
+
+## 2.3. separate()함수
+ * 하나의 열을 특정 조건에 따라 여러개의 열로 나누어주는 함수 입니다.
+ * separate(data,col,into,sep,~)
+  ** col:조건에 따른 분할을 진행할 열이름
+  ** into:분할된 결과가 저장될 각 열들의 이름
+  ** sep:분할 조건
+```{r}
+storms2 <- separate(storms, date,c("year","month","day"),sep="-")
+storms2
+```
+
+## 2.4.unite() 함수
+  * 여러개로 나누어진 열을 특정 조건에 따라 결합해주는 함수입니다.
+  * unite(data,col,...,sep)
+   ** col:조건에 따라 결합된 결과가 저장될 열이름
+   **...:합쳐질 열이름들
+   ** sep:결합시 구분자
+```{r}
+unite(storms2,"date",year,month,day,sep="-")
+```
+
+# 3. dplyr
+ * dplyr은 Hadley Wickham이 만든 데이터 핸들링을 위한 패키지
+ * dplyr은 C++로 작성되어 기존 데이터핸들링 패키지보다 빠른조작이 가능
+ * 각종 데이터베이스 지원(MYSQL,Postgresql,SQLite,BigQeury)
+ * R의 기본문법과 프로그래밍능력만으로도 데이터의 조작이 가능하지만,dplyr 패키지를 활용하면 통일된 문법양식으로 데이터조작이 가능함
+ * 체인연산자를 지원함으로(%>%) 앞부분의 연산결과를 뒤에 오는 함수의 입력값으로 사용할 수 있음
+ 
+### dplyr의 주요함수
+```{r}
+#filter() : 지정한 조건식에 맞는 데이터를 추출
+#arrange() : 정렬
+#select() : 열의 추출
+#mutate() : 열추가
+#summarise() ; 집계
+```
+ 
+### dplyr 실습데이터 :nycflights13
+ *미국 휴스턴에서 출발하는 모든 비행기의 이착륙
+```{r}
+#install.packages("nycflights13) #해당패키지에 데이터가 있음
+library(nycflights13)
+library(dplyr)
+head(flights)
+```
+
+### 3.1 filter() 함수
+ * 데이터에서 원하는 조건에 따라 행을 추출하는 함수
+ * filter(데이터,조건1ㅣ조건2):조건1 또는 조건2 둘중 한가지를 충족하는 데이터를 추출
+ *조건을 작성할때는 쉼표','는 AND,'ㅣ'는 OR와 같음
+ 
+```{r}
+filter(flights,month ==1 | day ==1)#37198row
+```
+
+```{r}
+filter(flights,month==1|day==1) #842row
+```
+
+```{r}
+filter(flights,month==1,day==1,year==2013)#832row
+```
+
+## 3.2 arrange() 함수
+ * 데이터를 원한느 조건에 따라 정렬해주는 함수
+ * arrange(데이터,정렬기준컬럼1,정렬기준컬럼2,정렬기준컬럼3)
+ * 내림차순으로 정렬시 desc함수 사용: arrange(데이터,desc(정렬기준컬럼1))
+```{r}
+arrange(flights,year,month,day)# ArrDelay, Month,Year 순으로 정렬
+```
+
+```{r}
+arrange(flights,desc(month)) #Month 컬럼기준으로 내림차순으로 정렬
+```
+
+## 3.3. select() 함수
+ * select함수는 원하는 열(column)을 추출
+ * select(데이터,컬럼1,컬럼2,컬럼3)
+ * select(데이터,컬럼1:컬럼3)
+ * 컬럼명을 변경할수 있음
+```{r}
+select(flights,year,month,day)
+```
+
+```{r}
+select(flights,year:day)
+```
+
+```{r}
+select(flights,-(year:day))
+```
+
+## 3.4 distinct() 함수
+ * 중복항목을 제외한 데이터를 확인 할 수 있음(unique함수와 동일)
+ * distinct(데이터,컬럼명)
+```{r}
+distinct(select(flights,tailnum))
+```
+
+```{r}
+distinct(select(flights,origin,dest))
+```
+
+## 3.5. mutate() 함수
+ * 기존 데이터 프레임에 새로운 열을 추가해줌
+ * 데이터프레임 내의 변수들을 활용해 새로운 변수를 만들때 효과적임
+ * 새로 생성한 변수를 해당 함수 내에서 바로 활용이 가능
+```{r}
+#arr_delay - dep_delay값으로 gain컬럼 추가
+mutate(flights,gain=arr_delay - dep_delay)
+```
+
+```{r}
+#gain컬럼을 만드는 동시에 gain컬럼을 이용해 다수의 다른 변수를 생성가능
+mutate(flights,
+       gain = arr_delay - dep_delay,
+       gain_per_hour = gain/(air_time/60))
+```
+
+## 3.6 summarise() 함수
+ * mean(),sd(),var(), median()함수를 활용해 기술통계량을 확인
+ * 결과를 데이터프레임으로 반환함
+```{r}
+summarise(flights, delay= mean(dep_delay,na.rm=TRUE))
+```
+
+## 3.7 group_by() 함수
+ * 변수의 레벨에 따라 자료를 그룹화해줌
+ * 그룹에 따른 수치자료를 산출하고 싶을때 편리함
+ * summarize함수와 함께 사용시 aggregate함수와 같은기능
+ * ex)직급에 따른 평균 연봉과 사용가능한 연차일수(휴가)를 구하고 싶을때!
+```{r}
+#비행기별로 그룹만들기
+by_tailnum <- group_by(flights, tailnum) #비행기별로 그룹만들기
+
+#비행기별 비행회수,비행거리평균,연착시간평균 산출
+delay <- summarise(by_tailnum,count=n(),dist=mean(distance,na.rm=TRUE),
+                   delay = mean(arr_delay,na.rm=TRUE))
+
+#회수가 20회 이상 거리가 2000이하인 비행기만 추출
+delay <-filter(delay,count>20,dist<2000)
+```
+ 
+ *위에서 만든 delay데이터로 시각화
+```{r}
+library(ggplot2)
+ggplot(delay, aes(dist,delay)) +
+  geom_point(aes(size = count), alpha = 1/2) +
+  geom_smooth() +
+  scale_size_area()
+```
+
+## 3.8. join()함수
+ * join(x,y)또는 join(x,y,by="기준열")형태
+ * 조인의 기준이 되는 단일컬럼이 존재하는 경우 별도 by인수를 저장하지 않아도 됨
+ * 조인의 기준이 되는 컬럼이 여러개이거나, 여러가지 컬럼을 동시에 활용해야하는경우 by인수를 사용
+```{r}
+#join 실습 데이터 생성
+
+superheroes <- "
+name, alignment,gender, publisher
+Magneto, bad, male, Marvel
+Storm, good, female, Marvel
+Mystique, bad ,female ,Marvel
+Batman, good , male ,DC
+Joker , bad, male, DC
+Catwomer, bad ,female, DC
+Hellboy, good male, Dark Horese Comics
+"
+
+publishers <- "
+publisher, yr_founded
+DC, 1934
+Marvel, 1939
+Image, 1992
+"
+
+superheroes <- read_csv(superheroes,trim_ws = TRUE, skip = 1)
+publishers <-read_csv(publishers,trim_ws= TRUE,skip=1)
+```
+* inner_join, left_join,anti_join,semi_join 각각의 출력값 확인하기
+```{r}
+inner_join(superheroes,publishers) #X,Y의 교집합
+```
+
+```{r}
+left_join(superheroes,publishers) #X기준(왼쪽)으로 머징
+```
+
+```{r}
+full_join(superheroes,publishers)# X,Y의 합집합
+```
+
+```{r}
+anti_join(superheroes,publishers) #X의 컬럼만 유지하여 머징
+```
+
+```{r}
+semi_join(superheroes,publishers) #Y의 여집합
+```
+
+# 4.margrittr
+ * magrittr 패키지는 연산자(operator)들의 집합들을 제공합니다.
+ * 데이터 연산을 왼쪽에서 오른쪽 순서로 구조화,
+ * nested함수 호출을 피함,
+ * 지역 변수 및 함수의 정의의 필요성을 최소화,
+ * 연산 순서 내에서 어디서나 추가 step을 만들 수 있음
+ * f(x)를 x%>%f()로 대체할 수 있음
+ * 이 연산자가 main operator(chaining)인데 해당 기능이 의미없어 보이겠지만 여러가지 기능을 결합하여 사용할때 이점이 명호가하다
+  *dplyr을 불러오면 자동으로 불러와지게 된다
+  
+## 4.1 main operator (Chaining; %>%)
+ * 여러단계의 함수나 연산을 연결하여 한번에 수행할 때 사용
+ * 앞의 함수의 결과는 바로 뒤에오는 함수의 입력값이 됨
+ * 데이터를 여러객체에 할당하지 않아도 되기때문에 메모리 관리에 유리함
+ 
+# 체인연산 사용하지 않을때
+```{r}
+a1 <- dplyr::group_by(flights, year,month,day)
+a2 <- select(a1,year:day,arr_delay)
+a3 <- summarise(a2,arr= mean(arr_delay,na.rm=TRUE))
+a4 <- filter(a3,arr>30)
+a4
+```
+# 체인연산 사용했을때
+```{r}
+flights %>%
+  group_by(year,month,day) %>%
+  select(arr_delay) %>%
+  summarise(
+    arr = mean(arr_delay,na.rm=TRUE)
+  ) %>% 
+  filter(arr>30)
+```
+
+## 4.2. .의 역할
+ * "."의 역할에 대해서 알아봅시다.
+ * 일반적으로 %>%연산자만 사용하시게 되면 제일 첫 인수에 자동으로 배정이 됩니다.
+```{r}
+head(iris,3)
+```
+
+```{r}
+iris %>% head(3) # = head(.,3)
+```
+ 
+ *데이터를 넘겨줘야 할 인수의 위치가 첫번째가 아닐 경우 다음과 같은 에러를 확인할 수 있음
+ * gsub()는 찾아 바꾸는 함수로써, 사용방법은 gusb(찾을 문자나 숫자,바꿀 문자나 숫자,데이터)
+```{r}
+a<-c("bannananana","an apple")
+gsub("n","l",a)
+```
+
+```{r}
+a %>% gsub("n","l")
+```
+
+```{r}
+a %>% gsub("n","l")
+```
+
+
+```{r}
+gsub("n","l",a)
+```
+
+
+```{r}
+a %>% gsub("n","l",.)
+```
+
+## 4.3 Chaining 예제
+
+### 4.3.1 matcars aggregate
+```{r}
+library(magrittr)
+```
+
+
+```{r}
+car_data <-
+  mtcars %>%                 #1
+  subset(hp>100) %>%         #2
+  aggregate(.~cyl, data=., FUN= . %>% mean %>% round(2)) %>% #3
+  transform(kpl = mpg %>% multiply_by(0.4251)) %>% #4
+  print #5
+```
+
+
+```{r}
+car_data <-
+  transform(aggregate(.~cyl,
+                      data=subset(mtcars,hp>100),
+                      FUN =function(x) round(mean(x),2)),
+            kpl = mpg*0.4251)
+car_data
+```
+
+### 4.3.2.예제 변환
+* 2.1. 예제
+tidyr의 함수들도 chaining 연산과 함께 사용하면 직관적으로 사용할 수 있습니다.
+```{r}
+cases %>% gather(Year, n, 2:4)
+```
+
+* 3.7. 예제
+dplyr에서도 함께 쓰여 데이트럴 그룹화하고 수치를 요약하는 등의 작업에 특화돼있습니다.
+```{r}
+#비행기별 비행회수, 비행거리평균, 연착시간평균 산출
+flights %>%
+  group_by(tailnum) %>%
+  summarise(
+    count = n(),
+    dist = mean(distance,na.rm = TRUE),
+    delay = mean(arr_delay,na.rm = TRUE)
+  )
+```
+
+# 5. tibble
+ 
+ * tibble은 tidyverse 생태계에서 데이터프레임을 대신하여 편리한 기능들 및 동작을 포함한 자료형입니다.
+  * factor 자동 변환
+  * 일부값만 출력
+  * 출력시 자료형 명시
+ * 데이터 프레임과 비교
+```{r}
+#생성 : data.frame()
+#강제변환(Coercion) : as.data.frame()
+#데이터 불러오기 : read.*()
+```
+
+## 5.1. tibble 생성
+
+tibble()
+```{r}
+tibble(
+  x =1:5,
+  y =1,
+  z = x^2+y
+)
+```
+
+tribble()
+ * 코드 단계에서 데이터를 입력받도록 하기 위해 존재하는 함수입니다.
+```{r}
+tribble(
+  ~x,~y,~z,
+  #---/--/----
+  "a",2,3.6,
+  "b",1,8.5
+)
+```
+
+as_tibble()
+ * 기존의 데이터 프레임을 tibble형으로 전환합니다.
+```{r}
+iris_tibble<- as_tibble(iris) #기존의 데이터프레임을 tibble로
+
+print(class(iris)) #기존의 데이터 프레임 클래스
+```
+
+
+```{r}
+print(class(iris_tibble)) #새롭게 정의된 tibble 클래스 (데이터 프레임도)
+```
+
+
+```{r}
+head(iris_tibble)
+```
+
+## 5.2. 데이터 불러오기
+* 데이터를 읽어올 때, dataframe이 아닌 tibble로 읽어오기 위해서,동일한 tidyverse 생태계에  속한 readr 패키지의 함수들을 필요로합니다. 
+    이미 tidyverse를 library하였으므로 바로 이용 가능합니다.
+    
+### read_csv(file)
+ *기존의 데이터 불러오기와 동일하게 파일명을 지정하여 해당 파일을 tibble로 읽어올 수 있습니다.
+```{r}
+read_csv("traffic.csv")
+```
+
+### read_csv(csv_url)
+* 외부에서 공개된 csv파일도 바로 읽어올 수 있습니다.
+** github,gist,google drive
+```{r}
+file_url <- "https://gist.githubusercontent.com/theoroe3/8bc989b644adc24117bc66f50c292fc8/raw/f677a2ad811a9854c9d174178b0585a87569af60/tibbles_data.csv"
+read_csv(file_url)
+```
+
+
+ ### locale 설정
+  * 한글이 포합된 데이터를 읽어올 떄, read.csv에서 fileEncoding으로 조정을 하였습니다.
+  * read_csv 에서는 주로 locale 인자를 설정해 주어야하는데, 통상적으로 local('ko',encoding='euc-kr')와
+    같이 설정해줍니다.
+  * 예제는 아래의 연습문제에서 데이터를 불러오는것으로 알아보겠습니다.
+  
+# PR12 연습문제
+
+## 문제1 
+  * 다음은 광주광역시의 연도별 폐기물 발생현황입니다.
+```{r}
+waste <-read_csv("광주광역시_연도별 폐기물 발생현황_20171231.csv",locale=locale('ko',encoding='euc-kr'))
+```
+
+
+```{r}
+waste
+```
+ * gather를 사용하여 waste를 아래와 같은 long 데이터 포맷으로 나타내보세요
+```{r}
+gather(waste,Year,n,4:13)
+```
+
+## 문제2
+ * 다음은 서울시 공공자전거 따릉이의 2019년 5월 대여에 관한 정보입니다.
+```{r}
+bike_tibble <- read_csv("bike_sample.csv")
+```
+
+ * 해당 데이터에서 다음과 같이 연령대별 정보를 요약해보세요.
+```{r}
+by_age <- bike_tibble %>%
+  group_by(연령대코드) %>%
+  summarize(count=n(),rentalmean=mean(이용건수))
+
+print(by_age)
+```
+
+## 문제3
+ * raw.csv는 국회의원 별 의원비 지출내역이고, join.csv는 국회의원 명단입니다.
+```{r}
+raw_data <- read_csv("raw.csv", locale=locale('ko',encoding='euc-kr'))
+```
+
+
+```{r}
+join_data <-read_csv("join.csv",locale=locale("ko",encoding='euc-kr'))
+```
+
+```{r}
+raw_data ; names(raw_data)
+```
+
+```{r}
+join_data ; names(join_data)
+```
+
+* 두 데이터를 조인하여 의원비 지출이 가장 많은 10명의 직업과 학력을 확인하세요.
+- HINT1 : 두 데이터를 조인하기 위해서는 raw.csv의 데이터를 group_by(),summarise()함수 또는 aggregate()를 사용하여 요약해야함.
+- HINT2 : 이름을 기준으로 join할것
+```{r}
+processed_data <- raw_data %>%
+  group_by(name,party) %>%
+  summarise(expense_sum=sum(expense)) %>%
+  arrange(desc(expense_sum)) %>%
+  head(10) %>%
+  merge(join_data,by='name') %>%
+  arrange(desc(expense_sum)) %>%
+  head(10) %>%
+  select(c(name,party.x,expense_sum,job,achievement)) %>%
+  as_tibble() %>%
+  mutate(job = as.character(job)) %>%
+  mutate(achievement = as.character(achievement)) %>%
+  mutate(party.x = as.character(party.x)) %>%
+  mutate(name = as.character(name))
+
+
+colnames(processed_data) <-c('name','party','expense_sum','job','achievement')
+
+print(processed_data)
+
+
+```

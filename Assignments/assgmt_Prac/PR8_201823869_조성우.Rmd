@@ -1,0 +1,261 @@
+---
+title: "PR8- Apply,Aggregate"
+author: "조성우"
+date: '2020년 5월 8일 '
+output:
+  word_document: default
+  html_document: default
+---
+# 1.apply
+ *복수의 데이터에 함수를 일괄 적용할때 사용함
+ * apply,lapply,sapply,vapply,tapply,mapply 등이 있음
+ * 각 apply함수는 입력받는 데이터의 형태와 출력하는 데이터의 형태에 따라 다르게 적용함
+
+## 1.1. apply함수
+ * 형식 : apply(data.margin(1또는2),function)
+ * margin 인수를 1 또는 2로 사용하며 1은 행, 2는 열을 적용
+ * 행이나 열의 합계, 평균등을 일괄적으로 구할 수 있음
+```{r}
+head(mtcars,1)
+```
+
+```{r}
+apply(mtcars[1:3,],1,FUN=mean) #1-3행의 평균
+```
+
+```{r}
+apply(mtcars[,1:3],2,FUN=mean) #1-3열의 평균
+```
+
+## 1.2. lapply(list appl)
+ * 형식 : lapply(data,function)
+ * 리스트형의 데이터를 받아 리스트로 결과를 반환
+ * 데이터프레임의 각 열은 리스트로 구성되어있음
+```{r}
+lapply(mtcars[,1:3],mean)
+```
+## 1.3. sapply(simple apply)
+ * 형식 : function(data, function, simplify=F)
+ * 입력값 : 벡터,리스트,데이터프레임 가능
+ * 출력값 : 벡터,리스트,매트릭스 형태로 결과를 반환
+ * 인수 simplify=F이면 리스트로 결과 반환
+```{r}
+x <- 1:5 ;y <- 11:14
+z <- list(x,y)
+sapply(x,function(x){x+1}) #벡터 입력, 벡터 출력 
+```
+
+```{r}
+sapply(z,function(x){x+1}) #리스트입력 , 리스트 출력
+```
+```{r}
+sapply(mtcars[1:3,],function(x){x+1},simplify=F) #데이터프레임 입력, 리스트 출력
+```
+## 1.4. tapply(table apply)
+* 그룹으로 묶은 후 함수를 적용,적용 값을 벡터나 행렬로 반환
+
+```{r}
+patient <- read.table("sample_data.txt",header=TRUE)
+factor(patient$type)
+```
+
+```{r}
+tapply(patient$type,patient$type,length) #type에 따른 그룹별 환자의 수
+``` 
+
+```{r}
+tapply(patient$age,patient$type,mean) #type에 따른 그룹별 나의 평균
+```
+# 2. aggregating
+  * 예제 데이터
+```{r}
+seg.df <- read.csv("http://goo.gl/qw303p")
+head(seg.df)
+```
+## 2.1. mean, sd 통계함수
+```{r}
+attach(seg.df)
+mean(income[Segment == "Moving up"]) # Moving up 세그먼트 집단의 소득평균
+```
+
+```{r}
+mean(income[Segment == "Moving up" & subscribe == "subNo"]) # Moving up 세그먼트 + 서비스미사용자의소득평균
+```
+## 2.2. apply 함수
+```{r}
+apply(seg.df[,c(1,3,4)],2,mean) #나이,수입,자녀 수 평균
+```
+
+```{r}
+str(apply(seg.df[,c(1,3,4)],2,mean))
+```
+
+```{r}
+apply(seg.df[Segment =="Moving up" , c(1,3,4)], 2, mean) #Moving up 세그먼트 + 서비스미사용자의 소득평균
+```
+## 2.3. table함수
+```{r}
+table(kids) #자녀수 현황
+```
+
+```{r}
+table(ownHome, subscribe) #이용자기준 , 주거형태현황
+```
+
+```{r}
+table(Segment, kids,subscribe) #세그먼트,구독여부,자녀수
+```
+## 2.4. by 함수
+ * 사용방식 : by(목표변수,기준변수,함수)
+ * by함수는 결과 값을 리스트로 반환한다.
+```{r}
+by(income,Segment,mean)
+```
+
+```{r}
+by(income,list(Segment, subscribe),mean)
+```
+## 2.5. aggregate 함수
+ * 사용방식 : aggregate(목표변수,기준변수,함수)
+ * 결과값을 데이터프레임으로 출력해 주는것이 가장 큰 장점임.
+ * 기준변수가 list로 입력돼야 한다
+```{r}
+aggregate(income, list(Segment),mean )
+```
+
+```{r}
+str(aggregate(income , list(Segment),mean))
+```
+  * 포뮬러를 사용하면 효과적이다 (변수명지정, 리스트변환)
+```{r}
+aggregate(income ~ Segment, data=seg.df,mean)
+```
+
+```{r}
+aggregate(income~Segment+ownHome+subscribe,data=seg.df,mean)
+```
+## 2.6. cut 함수
+  * cut함수는 연속형 변수를 특정 구간으로 구분하여 명목형 변수로 변환한다.
+  * cut(데이터,breaks=구간수,labels=구간이름)
+```{r}
+cut.data = aggregate(income ~ Segment + ownHome + subscribe, data = seg.df,mean)
+cut.data$income2 = cut(cut.data$income, breaks = seq(0,70000,10000))
+cut.data$income2 = cut(cut.data$income, breaks = c(0,20000,30000,40000,50000,60000,70000),
+                       labels = c('2만 이하', '2만~3만','3만~4만','4만~5만','5만~6만','6만 이상'))
+cut.data
+```
+## 2.7. grep 함수
+```{r}
+grep("ap",c("apple","Apple","apple2","bbapple")) #ap를 포함하는 원소들의 위치
+```
+
+```{r}
+grep("ap", c("apple","Apple","apple2","bbapple"),value=TRUE) #ap를 포함하는 원소
+```
+
+```{r}
+grep("[1-3]", c("apple1","apple2","apple3","apple4","Apple1")) #1,2,3를 포함하는 원소
+```
+
+```{r}
+grepl("ap",c("apple","Apple","apple2","bbapple")) #ap를 포함하는 원소들의 위치
+```
+ * 공통된 패턴을 가진 자료들의 위치를 찾아서 위치 값을 활용해 데이터를 일괄 변환할 때 사용한다
+```{r}
+seg.df$ownHome = as.character(seg.df$ownHome)
+grep('Yes',seg.df$ownHome)
+```
+
+```{r}
+head(seg.df)
+```
+
+```{r}
+seg.df$ownHome[grep('Yes',seg.df$ownHome)] = 'Yes'
+head(seg.df)
+```
+## 2.8. gsub 함수
+* 현재데이터의 Segment 컬럼에 한칸 띄워쓰기를 없애고 싶을때, 다음과 같이 사용한다
+```{r}
+seg.df$Segment <- gsub(" ","",seg.df$Segment)
+head(seg.df)
+```
+## 2.9. which,which.max ,which.min
+```{r}
+x <-c(2,4,6,7,10)
+x%%2
+```
+
+```{r}
+which(x %% 2 == 0)
+```
+
+```{r}
+x[which(x %% 2 == 0 )]
+```
+
+```{r}
+x <- c(2,4,6,7,10)
+which.min(x)
+```
+
+```{r}
+x[which.min(x)]
+```
+
+```{r}
+which.max(x)
+```
+
+```{r}
+x[which.max(x)]
+```
+
+# PR8 연습문제 
+## 문제 1 
+ * 다음 문제를 grade.csv파일을 활용해 해결하세요 
+######  1.grade.csv 파일을 grade 변수에 저장합니다
+```{r}
+grade <- read.csv("grade.csv") #1
+```
+######  2.aggregate 함수를 활용해 각 반별 수학점수 평균을 출력해보세요.
+```{r}
+MathMbyclass<- aggregate(grade$math,list(grade$class),mean) #2
+print(MathMbyclass)
+```
+
+######  3.apply 함수를 활용해 수학 점수와 컴퓨터 점수의 평균을 출력해보세요.
+```{r}
+apply(grade[,c(4,5)],2,FUN=mean) #3
+```
+## 문제 2
+ * PR5 문제1에서 ","로 인해 숫자가 character형으로 인식되는 문제가 발생했었습니다.
+ * 이 문제를 sapply함수를 사용하여 해결해보세요.
+ * Hint: gsub함수 이용 (특정 문자열 치환)
+ 
+ ###### PR5 문제 1 불러오기
+```{r}
+#불러오기 + 문제점발견
+library(XML)
+library(httr)
+url <- "https://www.worldometers.info/coronavirus/"
+
+html_source <- GET(url) #html 전체 소스를 받아옴
+tabs <- readHTMLTable(rawToChar(html_source$content), stringsAsFactors = F)
+covid_yesterday <- tabs$main_table_countries_yesterday 
+str(covid_yesterday)
+head(covid_yesterday,20)      
+
+```
+ ###### 해결
+```{r}
+#해결과정
+
+covid_yesterdayL<- sapply(covid_yesterday,function(x){gsub(",","",x)},simplify=F) #gsub으로 ","를 ""로 치환 , simplify를 F로 줌으로써 리스트로 반환
+covid_yesterdayL[c(2:9)] <- sapply(covid_yesterdayL[c(2:9)],as.numeric,simplify=F) #리스트 [2~9] 까지 numeric으로 변환하여 다시 리스트로 반환
+
+covid_yesterday <- data.frame(covid_yesterdayL,stringsAsFactors = F) #리스트로 반환한 sapply 출력값을 데이터프레임으로 재구성
+
+str(covid_yesterday)
+
+```

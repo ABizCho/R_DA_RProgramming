@@ -1,0 +1,287 @@
+---
+title: "HW1-2. 국회의원 표결 분석"
+author: "조성우"
+date: '2020년 5월 9일 '
+output: word_document
+---
+
+## 문제1. csv불러오기
+  * #새로 데이터프레임을 만들지 않고 받아온 데이터를 그대로 사용하려고 노력했습니다.이 과정에서 부득이하게 데이터프레임의 첫열을 지우고 열에 이름을 할당하는 작업을 문제2에서 실행하였습니다. 
+```{r}
+getwd()
+setwd("C:\\Users\\JSW\\Desktop\\강의자료\\R프로그래밍\\R 실습 및 과제\\HW\\HW안내및소스\\HW1\\1-2")
+
+virtualData <- read.csv(header=F,"virtualData.csv",stringsAsFactors = F)
+
+str(virtualData)
+
+```
+
+## 문제2
+  * dataFrame 의 각 의원 별 표결 정보에서 "찬성"은 1로 "반대"는 -1로 "기권"은 0으로 <NA>는 0으로 변경
+```{r}
+
+#새로 데이터프레임을 만들지 않고 받아온 데이터를 그대로 사용하려고 노력했습니다.
+#이 과정에서 문제1과 문제2의 해결 순서가 바뀌게 됐습니다.
+#감안하고 봐주시면 감사하곘습니다.
+
+
+
+#문제 2 : 전처리
+virtualData <- sapply(virtualData,function(x){gsub("찬성","1",x)}) 
+virtualData <- sapply(virtualData,function(x){gsub("반대","-1",x)})
+virtualData <- sapply(virtualData,function(x){gsub("기권","0",x)})
+
+virtualData0 <- as.numeric(virtualData) #숫자형 데이터셋으로 변경
+
+virtualData0[is.na(virtualData0)] <- 0 #NA값을 0으로 바꿔준다
+
+member <- virtualData[1:10] #기존의 데이터프레임 구성에 맞게 변수에 데이터를 재구성시켜줍니다.
+party <- virtualData[11:20]
+item1 <- virtualData0[21:30]
+item2 <- virtualData0[31:40]
+item3 <- virtualData0[41:50]
+item4 <- virtualData0[51:60]
+item5 <- virtualData0[61:70]
+item6 <- virtualData0[71:80]
+item7 <- virtualData0[81:90]
+item8 <- virtualData0[91:100]
+
+workedVD<- data.frame(member,party,item1,item2,item3,item4,item5,item6,item7,item8,stringsAsFactors = F) # 전처리가 완료된 데이터프레임 생성
+
+
+workedVD <- workedVD[,2:10] 
+workedVD
+str(workedVD)
+
+
+```
+
+## 문제1
+```{r}
+getwd()
+setwd("C:\\Users\\JSW\\Desktop\\강의자료\\R프로그래밍\\R 실습 및 과제\\HW\\HW안내및소스\\HW1\\1-2")
+
+virtualData <- read.csv(header=F,"virtualData.csv",stringsAsFactors = F)
+str(virtualData)
+virtualData
+
+
+```
+## 문제3 
+```{r}
+#문제 3------------------------------------------------------
+
+#계산의 용이성을 위해 데이터프레임 workedVD에서 행렬계산의 대상이 될 데이터만 subset하겠습니다.
+c <- c(workedVD$item1,workedVD$item2,workedVD$item3,workedVD$item4,workedVD$item5,workedVD$item6,workedVD$item7,workedVD$item8)
+c
+MatVD <- matrix(c,10,8,byrow=F) #구상한 계산을 위해 매트릭스를 열기준으로 만들겠습니다.
+
+
+
+#--------반복문으로 행렬곱 구현
+result <- matrix(NA,10,10) #반복문을 통한 내적 계산의 결과를 할당하기위한 matrix를 선언( 그 결과는 100개가 될것으로 10 X 10)
+
+#a로 행렬곱셈의 대상 행을 고정한채로 곱해줄 i에 해당하는 행을 모두 곱해주는 계산을 위해 a와 i로 두단계로 이루어진 반복문을 만들겠습니다.
+
+for (a in 1:10){      
+  for (i in 1:10){
+    result[i,a] <- sum(MatVD[a,]*MatVD[i,])}}
+
+innerVD <- data.frame(result) #결과를 다시 데이터프레임으로 변환합니다. 
+
+colnames(innerVD) <-c("김우동","박수박","이족발","홍라면","박보쌈","김피자","장감바스","백된장","이초밥","송돈까스") #결과에 해당하는  이름
+row.names(innerVD) <-c("김우동","박수박","이족발","홍라면","박보쌈","김피자","장감바스","백된장","이초밥","송돈까스") #결과에 해당하는 이름
+
+innerVD
+
+str(innerVD)
+```
+## 문제4
+ * 문제3 을 통해 만들어진 데이터프레임을 분석해보세요.
+  - 예) 표결 결과가 가장 크게 차이나는 경우는 XX의원과 XX의원을 비교했을 때이다
+
+### 분석 :
+
+ * 의원간 표결 결과가 가장 positive한 관계는  김우동 & 홍라면(6), 김우동 & 이초밥(6) 의 두 관계가 있다.
+ 
+    ->  김우동과 홍라면 이초밥 셋 다 일식우리당 소속으로 이를 보면 주로 같은 당의 의원간 positive 한 관계를 가짐을 알 수 있고 이는 이족발&박보쌈(4) 이족발&백된장(4) 의 결과를 보아 야식한국당에서도 같은 분석결과가 나오는 것을 알 수 있다, 하지만  그중에서도 일식우리당이 당내 구성원 간 가장 높은 표결 일치도를 보여 단합이 잘 되는 모습을 보인다, 다만 김피자와 장 감바스 두 의원으로 구성된 호화양식당은 두 의원간 (1)의 관계를 가져 거대 양당에 비해 비교적 약한 단합력을 가지고 있다고 예상된다)
+ 
+ * 의원간 표결 결과가가장 negative한 관계는  김우동 & 이족발(-6), 김우동 & 박보쌈(-6), 이족발 & 이초밥(-6) 이다 (일식우리당 VS 야식한국당)
+    ->  총의석이 제시된 데이터의 10석이라고 할 때 일식우리당과 야식한국당 거대 양당간 표결이 가장 낮은 표결 일치도를 보여 두 당은 서로 비협조적이고 경쟁적인 관계에 있음을 알 수 있다.
+
+ * 서로간 가장 무관한 표결을 보인 관계는 이족발&장감바스(0), 김피자&이초밥(0) 이다.
+    ->  해당 분석의 중심에 있는 당은 장감바스,김피자를 총 구성원으로 가지고 있는 호화양식당으로 ,호화양식당은 이족발(야식한국당)과 이초밥(일식우리당)과 가장 낮은관계를 보임으로써 거대 양당에 치우치지 않는 독자적인 노선을 가지고 있음을 알 수 있다.
+
+
+## 문제5
+ * 문제2 에서 데이터프레임을 만든 방법을 이용해 정당 별 표결 평균 및 분산을 구해보세요. 평균과 분산은 8차원 벡터형태여야 합니다.
+```{r}
+#정당별 평균함수 Define
+mean.party <- function(b){         #첫번째 인자 a에 결과를 할당할 8차원벡터의 변수명을/두번째 인자에 평균낼 정당명을 입력
+  a <- numeric(8)
+  
+  a[1] <- mean(workedVD$item1[party == b])
+  a[2] <- mean(workedVD$item2[party == b])
+  a[3] <- mean(workedVD$item3[party == b])
+  a[4] <- mean(workedVD$item4[party == b])
+  a[5] <- mean(workedVD$item5[party == b])
+  a[6] <- mean(workedVD$item6[party == b])
+  a[7] <- mean(workedVD$item7[party == b])
+  a[8] <- mean(workedVD$item8[party == b])
+  
+  return(a)
+}
+
+MeanOfFruit <- mean.party("과일천하당") #정당별 평균함수 Call
+MeanOfJapan <- mean.party("일식우리당")
+MeanOfKorea <- mean.party("야식한국당")
+MeanOfWest  <- mean.party("호화양식당")
+
+MeanOfFruit
+MeanOfJapan
+MeanOfKorea
+MeanOfWest
+
+
+#정당별 분산함수 Define
+var.party <- function(b){         #첫번째 인자 a에 결과를 할당할 8차원벡터의 변수명을/두번째 인자에 평균낼 정당명을 입력
+  a <- numeric(8)
+  
+  a[1] <- var(workedVD$item1[party == b])
+  a[2] <- var(workedVD$item2[party == b])
+  a[3] <- var(workedVD$item3[party == b])
+  a[4] <- var(workedVD$item4[party == b])
+  a[5] <- var(workedVD$item5[party == b])
+  a[6] <- var(workedVD$item6[party == b])
+  a[7] <- var(workedVD$item7[party == b])
+  a[8] <- var(workedVD$item8[party == b])
+  
+  return(a)
+}
+
+
+VarOfFruit <- var.party("과일천하당") #정당별 분산함수 Call
+VarOfJapan <- var.party("일식우리당")
+VarOfKorea <- var.party("야식한국당")
+VarOfWest  <- var.party("호화양식당")
+
+VarOfFruit  # 과일천하당은 단 한명의 당원으로 구성된 당으로 분산이 존재할 수 없다.
+VarOfJapan
+VarOfKorea
+VarOfWest
+```
+## 문제6
+ * 의안 정보 시스템 에서 원하는 표결 정보 10 개를 받아 의원 간 표결 비교표를 만들고 분석해보세요. 또, 정당 별 평균 및 분산도 구해보세요.
+   – 의안 정보 시스템 웹페이지 주소
+   – 페이지에 접속하고 원하는 의안명을 클릭하신 후, 의원성명 탭을 클릭합니다.
+   
+    검색 된 의원 명, 소속 정당, 표결 결과를 모두 긁어 하나의 의안정보 당 csv 파일 한 개를 만듭니다(드래그로 선택 후 엑셀로 가공). 즉, 총 10 개의 csv 파일이   생성되어야 합니다.
+    
+  * 10 개의 표결정보 데이터(csv 파일)를 하나의 테이블로 만들어서 분석을 진행합니다.
+    방법은 2 가지가 있습니다. 2 가지중 한가지를 사용하시면 됩니다
+
+1. 다음 설명은 %in% 를 사용해 문제를 해결하는 방법입니다.
+
+   – 추가할 데이터의 각 행의 이름을 조사해 기본 데이터프레임에 있는 이름인지확인
+   – 기본 데이터 프레임에 있는 이름이라면, 기본 데이터프레임에 새로운 열을 만들고 해당 이름에 해당하는 행에 그 이름에 해당하는 정보(표결 정보)를 추가
+  – 기본 데이터 프레임에 없는 이름이라면, 기본 데이터프레임에 새로운 열을 만든 뒤, 그 이름에 해당하는 새로운 행을 만들고 이름에 해당하는 정보(당명,표결 정보)를 추가
+  
+2. merge 계열 함수를 사용하시면 문제를 해결할 수 있습니다.
+   – merge 계열 함수를 사용하지 않고, %in% 를 사용해 문제를 해결하시면 가산점이 있습니다.
+   – outer join 을 하기 위해서는 merge(x=a, y=b, by = c(“key1”, “key2”), all = T) 함수를 사용하시면 됩니다. x 와 y 는 결합할 데이터 프레임들, by 는 기준 열,all 은 outer join 의 유무 입니다.
+   
+#### 문제6.1 10개의 표결데이터 불러오기 및 전처리 후 데이터프레임화
+```{r}
+work.data <- function(x){   #csv파일을 전처리 및 데이터프레임화시키는 함수를 define
+x <- unlist(x)
+
+x <- strsplit(x,split="\t")   #엑셀의 csv파일에서 직접 불러와지지않아 메모장에 옮긴 후 ANSI로 인코딩하여 불러왔습니다 이 과정에서 열이 구분되지 않은 데이터셋이 되었기 때문에 CSV를 불러왔을 때 \t를 기준으로 데이터가 구분되어있습니다. 이를 다시 알맞게 구분된 원래의 데이터프레임을 만들기 위한 코드입니다.
+x <- unlist(x)
+
+x <- matrix(x,ncol=3,,byrow=T)
+x <- data.frame(x,stringsAsFactors = F)
+
+x <- sapply(x,function(x){gsub("찬성","1",x)},simplify = F)  #찬성 반대 기권을 숫자형 데이터로 바꿔주는 함수를 sapply로 실행해줍니다.
+x <- sapply(x,function(x){gsub("반대","-1",x)},simplify = F)
+x <- sapply(x,function(x){gsub("기권","0",x)},simplify = F)
+
+gsub("찬성","1",x)
+
+x <- data.frame(x,stringsAsFactors = F)
+
+
+x$X3 <- as.numeric(x$X3)
+
+
+colnames(x) <- c("name","party","vote")
+return(x)
+}
+
+item1 <- read.csv(header=F,"item1.csv",stringsAsFactors = F) #csv불러오기
+item2 <- read.csv(header=F,"item2.csv",stringsAsFactors = F)
+item3 <- read.csv(header=F,"item3.csv",stringsAsFactors = F)
+item4 <- read.csv(header=F,"item4.csv",stringsAsFactors = F)
+item5 <- read.csv(header=F,"item5.csv",stringsAsFactors = F)
+item6 <- read.csv(header=F,"item6.csv",stringsAsFactors = F)
+item7 <- read.csv(header=F,"item7.csv",stringsAsFactors = F)
+item8 <- read.csv(header=F,"item8.csv",stringsAsFactors = F)
+item9 <- read.csv(header=F,"item9.csv",stringsAsFactors = F)
+item10 <- read.csv(header=F,"item10.csv",stringsAsFactors = F)
+
+item1 <- work.data(item1)  # 아까만든 전처리함수를 call
+item2 <- work.data(item2)
+item3 <- work.data(item3)
+item4 <- work.data(item4)
+item5 <- work.data(item5)
+item6 <- work.data(item6)
+item7 <- work.data(item7)
+item8 <- work.data(item8)
+item9 <- work.data(item9)
+item10 <- work.data(item10)
+
+```
+#### 문제6.2 merge 활용 후처리
+```{r}
+
+merged.item <- merge(x=item1,y=item2,by='name',all.x= TRUE) #item1과 item2를 name을 기준변수로하고 merge
+merged.item <- merge(merged.item,item3,by='name',all.x=TRUE) #같은방식으로 쭉 merge
+merged.item <- merge(merged.item,item4,by='name',all.x=TRUE)
+merged.item <- merge(merged.item,item5,by='name',all.x=TRUE)
+merged.item <- merge(merged.item,item6,by='name',all.x=TRUE)
+merged.item <- merge(merged.item,item7,by='name',all.x=TRUE)
+merged.item <- merge(merged.item,item8,by='name',all.x=TRUE)
+merged.item <- merge(merged.item,item9,by='name',all.x=TRUE)
+merged.item <- merge(merged.item,item10,by='name',all.x=TRUE)
+
+merged.item <- merged.item[,c(1,2,3,5,7,9,11,13,15,17,19,21)]
+colnames(merged.item) <- c('name','party','vote1','vote2','vote3','vote4','vote5','vote6','vote7','vote8','vote9','vote10')
+
+merged.item[is.na(merged.item)] <- 0  #na값을 0으로 만들어줍니다
+head(merged.item,20)
+
+merged.item <- merged.item[,-c(1:2)] #계산을 위해 name, party 잠시 배제
+
+result <- matrix(NA,239,239) #내적곱 계산의 용이성을 위한 행렬 선언 : merged.item의 의원 수가 239명이기 때문에 239x239 행렬을 생성
+
+for (a in 1:239){      
+  for (i in 1:239){
+    result[i,a] <- sum(merged.item[a,]*merged.item[i,])}}
+
+str(result)
+
+df.result<- data.frame(result,stringsAsFactors = F)
+
+str(df.result)
+
+#해당 내적곱 결과의 이름을 설정하는데에 실패하여 더이상 진행할 수 없었습니다..ㅠㅠ
+
+head(df.result)
+```
+
+## 문제7 
+  - 문제 6 에서 선택한 10 개의 표결 정보들을 선택한 이유를 서술하고 분석한 내용들을 토대로 나름대로의 분석결과를 도출하세요.
+   10개의 표결 데이터는 데이터의 통일성을 위해 총선일인 4.15일 이후의 자료를 위주로 구성했습니다.
+   극소수의 반대,기권표를 가진 표결을 선택하기 보다,다른 표결들에 비해 상대적으로 반대나 기권표가 두드러진 자료들을 선택하여 유의미한 분석결과를 내고자 했습니다.
+   
+   

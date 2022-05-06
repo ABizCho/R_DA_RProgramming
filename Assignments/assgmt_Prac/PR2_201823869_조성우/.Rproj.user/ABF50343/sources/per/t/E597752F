@@ -1,0 +1,27 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1585117310758.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1983206728",
+    "id" : "E597752F",
+    "lastKnownWriteTime" : 1585219597,
+    "last_content_update" : 1585219597809,
+    "path" : "~/PR2_201823869_조성우/PR2_201823869_조성우.Rmd",
+    "project_path" : "PR2_201823869_조성우.Rmd",
+    "properties" : {
+        "cursorPosition" : "3,11",
+        "last_setup_crc32" : "6FADEB54bb338d19",
+        "scrollLine" : "0",
+        "tempName" : "Untitled2"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

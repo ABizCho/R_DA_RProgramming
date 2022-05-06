@@ -1,0 +1,168 @@
+---
+title: "PR9 - Package"
+author: "조성우"
+date: '2020 5월 15일 '
+output:
+  word_document: default
+  html_document: default
+---
+
+# 1. package 기본
+
+  * R에서 기본적으로 제공하는 함수 외에 다른 프로그래머들이 필요하다 생각해서 만들어 놓은 함수들의 모음
+  * 이것을 보통 library 또는 API라고 칭함
+  * R에서는 보통 CRAN에서 R 재단이 인정한 패키지들을 공유
+  * 비공식적이지만 개인이 만들어서 공유하는패키지들이 있는데 보통 github에 업로드되어있음
+  
+  ## 1.1. 설치
+  * 설치명령어: install.packages()
+  * 다음시간 사용할 크롤링 관련 패키지 설치
+```{r}
+#install.packages("rvest")
+#install.packages("httr")
+#install.packages("Rselenium")
+```
+  ## 1.2. 불러오기
+      * 패키지를 불러오는 방법은 크게 두가지가 있습니다.
+          - library(package):설치되어있는 패키지를 불러옴
+          - require(package): 불러오려는 시도를하고 logical한 return값을 반환
+      * require()도 결과적으로 library()와 동일한 기능을 하지만, 결과값에서 차이가 나게됩니다
+          - library()는 패키지를 불러오는 것으로, 패키지가 없다면 에러 메세지를 반환할 것입니다.
+          -하지만 require()는 패키지가 없다고해서 에러메세지를 반환하는 것이 아닌, 패키지 유무에 대한 논리값을 반환할 것입니다.
+```{r}
+x <- library(rvest)
+```
+
+```{r}
+x
+```
+
+```{r}
+x <- require(rvest)
+x
+```
+
+```{r}
+#해당 패키지가 없다고 에러가 뜨면서 결과 knit시 에러가 발생 할 수 있는 부분입니다.
+#library(chron)
+
+#해당패키지가 없더라도 에러가 뜨지 않고 knit를 정상적으로 할 수 있습니다.
+require(chron)
+```
+
+## 1.3. 패키지 업데이트
+   * 패키지 개발자가 자신이 만든 패키지의 기능을 보완하거나 R버전이 업데이트 돼서 호환이 되게 수정하거나 오류사항을 수정
+   * 명령어는 update.packages(패키지)
+   * R studio를 쓰는 경우 우측 하단에 packages라는 탭이 보이는데 해당 탭 바로 밑에 update라는 항목이 보인다
+   * 이걸 누르고 원하는 패키지 또는 전체 패키지를 선택하고 업데이트를 눌러주면 된다
+```{r}
+#update.packages("rvest")
+```
+## 1.4. 불러온 패키지 사용중지
+```{r}
+#detach("packages:ggplot2",unload]=T)
+```
+# 2. package 고급
+## 2.1. package에서 함수 가져오기
+  * 다양한 패키지들을 불러오다 보면, 동일한 함수명을 사용해서 서로 충돌할 때가 있습니다.
+  * 그럴때는 패키지명::함수명으로 어떤 패키지에서 해당 함수를 사용할것인지 명시해서 문제를 해결할 수 있습니다.
+```{r}
+#require(plyr)
+#require(Hmisc)
+#require(Chron)
+#require(tseries)
+
+#plyr::summarize()
+#Hmisc:summarize()
+
+#chron::is.weekend()
+#tseries::is.weekend()
+
+require("igraph")
+L <- igraph::graph(n=9,c(1,2,2,3,3,1,3,4,4,6,4,5,5,8,7,8,8,9),directed=F)
+L
+```
+## 2.2. 패키지 삭제
+   * 패키지의 재설치가 필요하거나, 더이상 쓸모가 없어진 패키지들을 삭제해야할 필요가 있을 때,remove.packages()를 사용합니다.
+```{r}
+#remove.packages("rvest")
+```
+## 2.3. 편리한 사용자 정의 함수
+  * 해당 함수는 패키지명으로 구성된 문자형벡터를 입력으로 받아서, 설치 및 불러오기를 동시에 진행하는 함수입니다
+  * 만약 해당 패키지가 이미 설치되어있는 패키지라면 바로 설치과정을 생략하고 바로 불러오기를 진행하게 됩니다.
+```{r}
+take <- function(x) {
+  for (i in x){
+    if (!is.element(i, .packages(all.available = TRUE))){
+      install.packages(i)
+    }
+    library(i,character.only = TRUE)
+  }
+}
+take(c("rvest","httr"))
+```
+# 3. devtools
+   * devtools의 주 목적은 패키지 개발에 필요한 많은 작업들을 단순화시키는것인데, 뿐만 아니라 비공식 패키지의 설치와 패키지 버전 관리 측면에서도 상당히 중요한 패키지입니다.
+   ## 3.1. 비공식 패키지 설치
+     * CRAN에서 제공하는 패키지가 아닌, github에 공개되어있는 다양한 패키지들도 설치하여 사용할 수 있습니다.
+```{r}
+#install.packages("devtools")
+library(devtools)
+```
+
+```{r}
+#install.packages("devtools")
+library(devtools)
+```
+
+```{r}
+#install_github("패키지")
+```
+## 3.2. 원하는 버전 설치
+  *R의 패키지들이 최신 버전에 맞춰서 업데이트가 되지 않았다면, 이전 버전의 패키지를 사용해야만 할 경우들이 있으며 이때 사용하는것이 devtools의 install.version()입니다.
+  * install_version("패키지명",version="버전명",repos="http//cran.us.r-project.org")
+      - 패키지명과 어떤 버전명을 지정해주면 되며, repos는 어떤 서버에서 해당 내용을 다운받을지 지정해주는것입니다.
+  * 예시로 ggplot2를 들어보겠습니다. 2020년 05월 12일 기준 3.3.0이 최신버전인데 , 0.9.1 버전을 설치해보는 것으로 하겠습니다.
+```{r}
+library(devtools)
+#remove.packages("ggplot2")
+
+#install_version("ggplot2",version="0.9.1",repos="http://cran.us.r-project.org")
+
+#packageVersion("ggolot2")
+```
+# 4. tidyverse
+   * tidyverse는 dplyr,tidyr,gglot2등, R 프로그래밍의 핵심 패키지들을 한번에 설치 및 관리해주는 패키지입니다.
+```{r}
+# install.packages("tidyverse")
+# install.pakcages("glue")
+
+library(tidyverse)
+```
+
+# PR9 연습문제
+## 문제1
+   * scatterplot3d 패키지를 이용하여 iris 데이터의 1~3열을 3차원 산점도로 출력하시오
+```{r}
+Riris <-iris[,-4]
+
+Riris
+
+#install.packages("scatterplot3d")
+
+library(scatterplot3d)
+
+
+scatterplot3d(x=Riris$Sepal.Length,y=Riris$Sepal.Width,z=Riris$Petal.Length)
+```
+
+## 문제2
+  * github에 있는 ggplot2 패키지를 설치해보고, 버전을 출력해보세요.
+```{r}
+library(devtools)
+
+# remove.packages("ggplot2")
+devtools::install_github("tidyverse/ggplot2")
+
+packageVersion("ggplot2")
+```

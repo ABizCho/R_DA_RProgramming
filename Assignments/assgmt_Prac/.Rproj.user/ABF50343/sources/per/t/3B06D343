@@ -1,0 +1,26 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1584690596038.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3651272731",
+    "id" : "3B06D343",
+    "lastKnownWriteTime" : 1584691839,
+    "last_content_update" : 1584691839139,
+    "path" : "C:/Users/JSW/Desktop/강의자료/R프로그래밍/R 실습 및 과제/과제/PR1_201823869_조성우.Rmd",
+    "project_path" : "PR1_201823869_조성우.Rmd",
+    "properties" : {
+        "cursorPosition" : "40,17",
+        "scrollLine" : "14",
+        "tempName" : "Untitled2"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

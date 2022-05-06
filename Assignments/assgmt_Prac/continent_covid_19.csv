@@ -1,0 +1,8 @@
+"Country","TotalCases","NewCases","TotalDeaths","NewDeaths","TotalRecovered","CasePer1M","Continent"
+"Asia",358184,12188,14066,1640,"171127",NA,"Asia"
+"North America",759755,35195,39422,2711,"74274",NA,"North America"
+"Europe",1029214,32674,96228,4004,"289063",NA,"Europe"
+"South America",72531,4940,3318,261,"26856",NA,"South America"
+"Oceania",8039,73,76,4,"4651",NA,"Australia/Oceania"
+"Africa",20419,1426,1020,52,"4958",NA,"Africa"
+"",721,NA,15,NA,"644",NA,""
